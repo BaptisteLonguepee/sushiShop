@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sushishop/view/welcome/model/welcome_model.dart';
 import 'package:sushishop/view/welcome/viewmodel/welcome_viewmodel.dart';
 import 'package:sushishop/view/welcome/view/welcome_screen.dart';
+import 'package:sushishop/view/order_type/view/order_type_screen.dart';
 import 'package:sushishop/core/constant/color.dart';
 import 'package:sushishop/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -39,13 +40,20 @@ void main() {
       );
     });
 
-    testWidgets('navigateToNextScreen should show SnackBar', (
+    testWidgets('navigateToNextScreen should navigate to OrderTypeScreen', (
       WidgetTester tester,
     ) async {
       // Arrange
       final viewModel = WelcomeViewModel();
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('fr'), Locale('en')],
           home: Builder(
             builder: (context) {
               return Scaffold(
@@ -63,10 +71,10 @@ void main() {
 
       // Act
       await tester.tap(find.text('Test Button'));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       // Assert
-      expect(find.text('Navigation à implémenter'), findsOneWidget);
+      expect(find.byType(OrderTypeScreen), findsOneWidget);
     });
   });
 
@@ -165,7 +173,7 @@ void main() {
       expect(buttonSizedBox.height, greaterThanOrEqualTo(60));
     });
 
-    testWidgets('Tapping button should show SnackBar', (
+    testWidgets('Tapping button should navigate to OrderTypeScreen', (
       WidgetTester tester,
     ) async {
       // Arrange
@@ -174,11 +182,10 @@ void main() {
 
       // Act
       await tester.tap(find.byType(ElevatedButton));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       // Assert
-      expect(find.text('Navigation à implémenter'), findsOneWidget);
-      expect(find.byType(SnackBar), findsOneWidget);
+      expect(find.byType(OrderTypeScreen), findsOneWidget);
     });
 
     testWidgets('WelcomeScreen should have Stack with StackFit.expand', (
@@ -278,15 +285,10 @@ void main() {
 
       // Act - Tap button
       await tester.tap(find.byType(ElevatedButton));
-      await tester.pump();
-
-      // Assert - SnackBar appears
-      expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('Navigation à implémenter'), findsOneWidget);
-
-      // Wait for SnackBar to disappear
-      await tester.pump(const Duration(seconds: 2));
       await tester.pumpAndSettle();
+
+      // Assert - Navigate to OrderTypeScreen
+      expect(find.byType(OrderTypeScreen), findsOneWidget);
     });
   });
 }
