@@ -1,3 +1,10 @@
 {
-  "touch_to_start": "Toucher pour commencer"
+  "touch_to_start": "Toucher pour commencer",
+  "order_type_title": "Type de commande",
+  "order_type_question": "Comment souhaitez-vous commander ?",
+  "order_type_dine_in": "Sur Place",
+  "order_type_takeaway": "À Emporter",
+  "order_type_table_number": "Numéro de chevalet",
+  "order_type_enter_table_number": "Entrez le numéro",
+  "order_type_continue": "Continuer"
 }
