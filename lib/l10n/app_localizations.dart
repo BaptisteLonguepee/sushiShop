@@ -103,6 +103,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Touch to start'**
   String get touch_to_start;
+
+  /// No description provided for @order_type_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Type'**
+  String get order_type_title;
+
+  /// No description provided for @order_type_question.
+  ///
+  /// In en, this message translates to:
+  /// **'How would you like to order?'**
+  String get order_type_question;
+
+  /// No description provided for @order_type_dine_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Dine In'**
+  String get order_type_dine_in;
+
+  /// No description provided for @order_type_takeaway.
+  ///
+  /// In en, this message translates to:
+  /// **'Takeaway'**
+  String get order_type_takeaway;
+
+  /// No description provided for @order_type_table_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Table Number'**
+  String get order_type_table_number;
+
+  /// No description provided for @order_type_enter_table_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter number'**
+  String get order_type_enter_table_number;
+
+  /// No description provided for @order_type_continue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get order_type_continue;
 }
 
 class _AppLocalizationsDelegate

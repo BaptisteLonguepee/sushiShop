@@ -10,4 +10,25 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get touch_to_start => 'Toucher pour commencer';
+
+  @override
+  String get order_type_title => 'Type de commande';
+
+  @override
+  String get order_type_question => 'Comment souhaitez-vous commander ?';
+
+  @override
+  String get order_type_dine_in => 'Sur Place';
+
+  @override
+  String get order_type_takeaway => 'À Emporter';
+
+  @override
+  String get order_type_table_number => 'Numéro de chevalet';
+
+  @override
+  String get order_type_enter_table_number => 'Entrez le numéro';
+
+  @override
+  String get order_type_continue => 'Continuer';
 }

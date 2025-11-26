@@ -1,3 +1,10 @@
 {
-  "touch_to_start": "Touch to start"
+  "touch_to_start": "Touch to start",
+  "order_type_title": "Order Type",
+  "order_type_question": "How would you like to order?",
+  "order_type_dine_in": "Dine In",
+  "order_type_takeaway": "Takeaway",
+  "order_type_table_number": "Table Number",
+  "order_type_enter_table_number": "Enter number",
+  "order_type_continue": "Continue"
 }
