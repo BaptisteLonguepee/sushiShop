@@ -199,7 +199,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen> {
           boxShadow: [
             if (isSelected)
               BoxShadow(
-                color: AppColor.primaryColor.withOpacity(0.3),
+                color: AppColor.primaryColor.withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -211,7 +211,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? Colors.white.withOpacity(0.2)
+                    ? Colors.white.withValues(alpha: 0.2)
                     : AppColor.secondaryColor,
                 borderRadius: BorderRadius.circular(12),
               ),
