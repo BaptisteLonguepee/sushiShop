@@ -22,13 +22,10 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        Locale('en'),
-        Locale('fr'),
-      ],
+      supportedLocales: [Locale('en'), Locale('fr')],
       theme: ThemeData(
-          textTheme: GoogleFonts.kaiseiOptiTextTheme(),
-          colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        textTheme: GoogleFonts.kaiseiOptiTextTheme(),
+        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const WelcomeScreen(),
     );
