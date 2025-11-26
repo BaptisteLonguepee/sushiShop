@@ -1,4 +1,4 @@
-class AppGlobal {
-  static const String localhost = "http://127.0.0.1:3333/";
-  static const String baseUrl = localhost;
-}
+// class AppGlobal {
+//   static const String localhost = "http://127.0.0.1:3333/";
+//   static const String baseUrl = localhost;
+// }
