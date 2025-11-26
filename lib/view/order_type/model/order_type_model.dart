@@ -1,16 +1,10 @@
-enum OrderType {
-  dineIn,
-  takeaway,
-}
+enum OrderType { dineIn, takeaway }
 
 class OrderTypeModel {
   OrderType? selectedOrderType;
   int? tableNumber;
 
-  OrderTypeModel({
-    this.selectedOrderType,
-    this.tableNumber,
-  });
+  OrderTypeModel({this.selectedOrderType, this.tableNumber});
 
   bool get isValid {
     if (selectedOrderType == null) return false;

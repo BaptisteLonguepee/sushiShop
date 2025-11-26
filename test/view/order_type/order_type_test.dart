@@ -117,20 +117,22 @@ void main() {
       expect(notified, true);
     });
 
-    test('selectOrderType should clear table number when switching to takeaway',
-        () {
-      // Arrange
-      final viewModel = OrderTypeViewModel();
-      viewModel.selectOrderType(OrderType.dineIn);
-      viewModel.setTableNumber(5);
+    test(
+      'selectOrderType should clear table number when switching to takeaway',
+      () {
+        // Arrange
+        final viewModel = OrderTypeViewModel();
+        viewModel.selectOrderType(OrderType.dineIn);
+        viewModel.setTableNumber(5);
 
-      // Act
-      viewModel.selectOrderType(OrderType.takeaway);
+        // Act
+        viewModel.selectOrderType(OrderType.takeaway);
 
-      // Assert
-      expect(viewModel.selectedOrderType, OrderType.takeaway);
-      expect(viewModel.tableNumber, isNull);
-    });
+        // Assert
+        expect(viewModel.selectedOrderType, OrderType.takeaway);
+        expect(viewModel.tableNumber, isNull);
+      },
+    );
 
     test('setTableNumber should update table number', () {
       // Arrange
@@ -200,8 +202,9 @@ void main() {
       expect(viewModel.isValid, true);
     });
 
-    testWidgets('validateAndNavigate should show error for invalid selection',
-        (WidgetTester tester) async {
+    testWidgets('validateAndNavigate should show error for invalid selection', (
+      WidgetTester tester,
+    ) async {
       // Arrange
       final viewModel = OrderTypeViewModel();
       await tester.pumpWidget(
@@ -232,101 +235,104 @@ void main() {
     });
 
     testWidgets(
-        'validateAndNavigate should show error for dineIn without table number',
-        (WidgetTester tester) async {
-      // Arrange
-      final viewModel = OrderTypeViewModel();
-      viewModel.selectOrderType(OrderType.dineIn);
+      'validateAndNavigate should show error for dineIn without table number',
+      (WidgetTester tester) async {
+        // Arrange
+        final viewModel = OrderTypeViewModel();
+        viewModel.selectOrderType(OrderType.dineIn);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) {
-              return Scaffold(
-                body: ElevatedButton(
-                  onPressed: () => viewModel.validateAndNavigate(context),
-                  child: const Text('Validate'),
-                ),
-              );
-            },
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (context) {
+                return Scaffold(
+                  body: ElevatedButton(
+                    onPressed: () => viewModel.validateAndNavigate(context),
+                    child: const Text('Validate'),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      );
+        );
 
-      // Act
-      await tester.tap(find.text('Validate'));
-      await tester.pump();
+        // Act
+        await tester.tap(find.text('Validate'));
+        await tester.pump();
 
-      // Assert
-      expect(find.byType(SnackBar), findsOneWidget);
-      expect(
-        find.text('Veuillez entrer un numéro de chevalet'),
-        findsOneWidget,
-      );
-    });
+        // Assert
+        expect(find.byType(SnackBar), findsOneWidget);
+        expect(
+          find.text('Veuillez entrer un numéro de chevalet'),
+          findsOneWidget,
+        );
+      },
+    );
 
     testWidgets(
-        'validateAndNavigate should show success message for valid takeaway order',
-        (WidgetTester tester) async {
-      // Arrange
-      final viewModel = OrderTypeViewModel();
-      viewModel.selectOrderType(OrderType.takeaway);
+      'validateAndNavigate should show success message for valid takeaway order',
+      (WidgetTester tester) async {
+        // Arrange
+        final viewModel = OrderTypeViewModel();
+        viewModel.selectOrderType(OrderType.takeaway);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) {
-              return Scaffold(
-                body: ElevatedButton(
-                  onPressed: () => viewModel.validateAndNavigate(context),
-                  child: const Text('Validate'),
-                ),
-              );
-            },
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (context) {
+                return Scaffold(
+                  body: ElevatedButton(
+                    onPressed: () => viewModel.validateAndNavigate(context),
+                    child: const Text('Validate'),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      );
+        );
 
-      // Act
-      await tester.tap(find.text('Validate'));
-      await tester.pump();
+        // Act
+        await tester.tap(find.text('Validate'));
+        await tester.pump();
 
-      // Assert
-      expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('À emporter'), findsOneWidget);
-    });
+        // Assert
+        expect(find.byType(SnackBar), findsOneWidget);
+        expect(find.text('À emporter'), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        'validateAndNavigate should show success message for valid dineIn order',
-        (WidgetTester tester) async {
-      // Arrange
-      final viewModel = OrderTypeViewModel();
-      viewModel.selectOrderType(OrderType.dineIn);
-      viewModel.setTableNumber(12);
+      'validateAndNavigate should show success message for valid dineIn order',
+      (WidgetTester tester) async {
+        // Arrange
+        final viewModel = OrderTypeViewModel();
+        viewModel.selectOrderType(OrderType.dineIn);
+        viewModel.setTableNumber(12);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) {
-              return Scaffold(
-                body: ElevatedButton(
-                  onPressed: () => viewModel.validateAndNavigate(context),
-                  child: const Text('Validate'),
-                ),
-              );
-            },
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (context) {
+                return Scaffold(
+                  body: ElevatedButton(
+                    onPressed: () => viewModel.validateAndNavigate(context),
+                    child: const Text('Validate'),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      );
+        );
 
-      // Act
-      await tester.tap(find.text('Validate'));
-      await tester.pump();
+        // Act
+        await tester.tap(find.text('Validate'));
+        await tester.pump();
 
-      // Assert
-      expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('Sur place - Chevalet n°12'), findsOneWidget);
-    });
+        // Assert
+        expect(find.byType(SnackBar), findsOneWidget);
+        expect(find.text('Sur place - Chevalet n°12'), findsOneWidget);
+      },
+    );
 
     test('dispose should reset model', () {
       // Arrange

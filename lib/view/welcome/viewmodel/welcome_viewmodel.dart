@@ -8,10 +8,8 @@ class WelcomeViewModel extends ChangeNotifier {
   WelcomeModel get model => _model;
 
   void navigateToNextScreen(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const OrderTypeScreen(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (context) => const OrderTypeScreen()));
   }
 }

@@ -45,10 +45,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen> {
         foregroundColor: Colors.white,
         title: Text(
           localizations?.order_type_title ?? 'Type de commande',
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         elevation: 0,
@@ -61,7 +58,8 @@ class _OrderTypeScreenState extends State<OrderTypeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                localizations?.order_type_question ?? 'Comment souhaitez-vous commander ?',
+                localizations?.order_type_question ??
+                    'Comment souhaitez-vous commander ?',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -70,7 +68,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
-              
+
               // Bouton Sur Place
               _buildOrderTypeButton(
                 context,
@@ -79,9 +77,9 @@ class _OrderTypeScreenState extends State<OrderTypeScreen> {
                 label: localizations?.order_type_dine_in ?? 'Sur Place',
                 isSelected: _viewModel.selectedOrderType == OrderType.dineIn,
               ),
-              
+
               const SizedBox(height: 20),
-              
+
               // Bouton À Emporter
               _buildOrderTypeButton(
                 context,
@@ -90,21 +88,26 @@ class _OrderTypeScreenState extends State<OrderTypeScreen> {
                 label: localizations?.order_type_takeaway ?? 'À Emporter',
                 isSelected: _viewModel.selectedOrderType == OrderType.takeaway,
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Champ pour le numéro de chevalet (si Sur Place)
               AnimatedOpacity(
-                opacity: _viewModel.selectedOrderType == OrderType.dineIn ? 1.0 : 0.0,
+                opacity: _viewModel.selectedOrderType == OrderType.dineIn
+                    ? 1.0
+                    : 0.0,
                 duration: const Duration(milliseconds: 300),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: _viewModel.selectedOrderType == OrderType.dineIn ? null : 0,
+                  height: _viewModel.selectedOrderType == OrderType.dineIn
+                      ? null
+                      : 0,
                   child: _viewModel.selectedOrderType == OrderType.dineIn
                       ? Column(
                           children: [
                             Text(
-                              localizations?.order_type_table_number ?? 'Numéro de chevalet',
+                              localizations?.order_type_table_number ??
+                                  'Numéro de chevalet',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -121,7 +124,10 @@ class _OrderTypeScreenState extends State<OrderTypeScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                               decoration: InputDecoration(
-                                hintText: localizations?.order_type_enter_table_number ?? 'Entrez le numéro',
+                                hintText:
+                                    localizations
+                                        ?.order_type_enter_table_number ??
+                                    'Entrez le numéro',
                                 filled: true,
                                 fillColor: Colors.white,
                                 border: OutlineInputBorder(
@@ -143,9 +149,9 @@ class _OrderTypeScreenState extends State<OrderTypeScreen> {
                       : const SizedBox.shrink(),
                 ),
               ),
-              
+
               const Spacer(),
-              
+
               // Bouton Continuer
               ElevatedButton(
                 onPressed: _viewModel.isValid
@@ -233,11 +239,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen> {
               ),
             ),
             if (isSelected)
-              const Icon(
-                Icons.check_circle,
-                color: Colors.white,
-                size: 28,
-              ),
+              const Icon(Icons.check_circle, color: Colors.white, size: 28),
           ],
         ),
       ),
