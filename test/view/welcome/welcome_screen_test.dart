@@ -14,7 +14,7 @@ void main() {
       final model = WelcomeModel();
 
       // Assert
-      expect(model.backgroundImage, 'assets/images/sushi_background.jpg');
+      expect(model.backgroundImage, 'assets/images/sushi_background.png');
     });
 
     test('WelcomeModel should accept custom backgroundImage', () {
@@ -33,7 +33,7 @@ void main() {
 
       // Act & Assert
       expect(viewModel.model, isA<WelcomeModel>());
-      expect(viewModel.model.backgroundImage, 'assets/images/sushi_background.jpg');
+      expect(viewModel.model.backgroundImage, 'assets/images/sushi_background.png');
     });
 
     testWidgets('navigateToNextScreen should show SnackBar', (WidgetTester tester) async {
