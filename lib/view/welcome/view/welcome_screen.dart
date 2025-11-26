@@ -45,7 +45,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     end: Alignment.bottomCenter,
                     colors: [
                       AppColor.primaryColor,
-                      AppColor.primaryColor.withOpacity(0.7),
                     ],
                   ),
                 ),
@@ -65,7 +64,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.5),
                   ],
                 ),
               ),
