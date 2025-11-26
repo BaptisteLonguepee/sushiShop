@@ -13,9 +13,7 @@ class ProductRepository {
         .select()
         .order('id', ascending: true);
 
-    return (response as List)
-        .map((e) => Product.fromMap(e))
-        .toList();
+    return (response as List).map((e) => Product.fromMap(e)).toList();
   }
 
   // 🔹 Récupérer un produit par ID

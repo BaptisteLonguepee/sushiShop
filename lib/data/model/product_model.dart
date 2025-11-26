@@ -3,11 +3,7 @@ class Product {
   final String name;
   final double price;
 
-  Product({
-    required this.id,
-    required this.name,
-    required this.price,
-  });
+  Product({required this.id, required this.name, required this.price});
 
   // Convert Supabase JSON → Product
   factory Product.fromMap(Map<String, dynamic> map) {
