@@ -27,6 +27,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get retry => 'Réessayer';
 
   @override
+  String get close => 'Fermer';
+
+  @override
+  String get addToCart => 'Ajouter au panier';
+
+  @override
   String get order_type_title => 'Type de commande';
 
   @override

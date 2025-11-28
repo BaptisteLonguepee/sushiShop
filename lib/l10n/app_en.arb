@@ -5,6 +5,8 @@
   "noProducts": "No products available",
   "errorLoadingProducts": "Error loading products",
   "retry": "Retry",
+  "close": "Close",
+  "addToCart": "Add to cart",
   "order_type_title": "Order Type",
   "order_type_question": "How would you like to order?",
   "order_type_dine_in": "Dine In",

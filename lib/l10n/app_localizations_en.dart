@@ -27,6 +27,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retry => 'Retry';
 
   @override
+  String get close => 'Close';
+
+  @override
+  String get addToCart => 'Add to cart';
+
+  @override
   String get order_type_title => 'Order Type';
 
   @override
