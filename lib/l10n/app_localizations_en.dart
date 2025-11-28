@@ -31,4 +31,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get order_type_continue => 'Continue';
+
+  @override
+  String get product_quantity => 'Quantity';
+
+  @override
+  String get add_to_cart => 'Add to cart';
+
+  @override
+  String get retry => 'Try again';
 }

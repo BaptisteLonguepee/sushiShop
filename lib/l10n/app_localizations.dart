@@ -145,6 +145,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue'**
   String get order_type_continue;
+
+  /// No description provided for @product_quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get product_quantity;
+
+  /// No description provided for @add_to_cart.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to cart'**
+  String get add_to_cart;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get retry;
 }
 
 class _AppLocalizationsDelegate

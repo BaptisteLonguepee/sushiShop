@@ -31,4 +31,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get order_type_continue => 'Continuer';
+
+  @override
+  String get product_quantity => 'Quantité';
+
+  @override
+  String get add_to_cart => 'Ajouter au panier';
+
+  @override
+  String get retry => 'Réessayer';
 }

@@ -6,5 +6,8 @@
   "order_type_takeaway": "Takeaway",
   "order_type_table_number": "Table Number",
   "order_type_enter_table_number": "Enter number",
-  "order_type_continue": "Continue"
+  "order_type_continue": "Continue",
+  "product_quantity": "Quantity",
+  "add_to_cart": "Add to cart",
+  "retry": "Try again"
 }
