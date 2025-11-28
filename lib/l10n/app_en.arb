@@ -1,10 +1,15 @@
 {
   "touch_to_start": "Touch to start",
+  "homeTitle": "Sushi Shop",
+  "ourProducts": "Our products",
+  "noProducts": "No products available",
+  "errorLoadingProducts": "Error loading products",
+  "retry": "Retry",
   "order_type_title": "Order Type",
   "order_type_question": "How would you like to order?",
   "order_type_dine_in": "Dine In",
   "order_type_takeaway": "Takeaway",
   "order_type_table_number": "Table Number",
-  "order_type_enter_table_number": "Enter number",
+  "order_type_enter_table_number": "Enter the number",
   "order_type_continue": "Continue"
 }

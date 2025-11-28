@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../model/order_type_model.dart';
+import '../../home/view/home_screen.dart';
 
 class OrderTypeViewModel extends ChangeNotifier {
   final OrderTypeModel _model = OrderTypeModel();
@@ -45,16 +46,10 @@ class OrderTypeViewModel extends ChangeNotifier {
       return;
     }
 
-    // Navigation à implémenter vers l'écran suivant
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          _model.selectedOrderType == OrderType.dineIn
-              ? 'Sur place - Chevalet n°${_model.tableNumber}'
-              : 'À emporter',
-        ),
-        duration: const Duration(seconds: 2),
-      ),
+    // Navigation vers la HomeScreen après sélection valide
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      (route) => false,
     );
   }
 

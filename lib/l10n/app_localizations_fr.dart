@@ -12,6 +12,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get touch_to_start => 'Toucher pour commencer';
 
   @override
+  String get homeTitle => 'Sushi Shop';
+
+  @override
+  String get ourProducts => 'Nos produits';
+
+  @override
+  String get noProducts => 'Aucun produit disponible';
+
+  @override
+  String get errorLoadingProducts => 'Erreur lors du chargement des produits';
+
+  @override
+  String get retry => 'Réessayer';
+
+  @override
   String get order_type_title => 'Type de commande';
 
   @override

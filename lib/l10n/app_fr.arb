@@ -1,5 +1,10 @@
 {
   "touch_to_start": "Toucher pour commencer",
+  "homeTitle": "Sushi Shop",
+  "ourProducts": "Nos produits",
+  "noProducts": "Aucun produit disponible",
+  "errorLoadingProducts": "Erreur lors du chargement des produits",
+  "retry": "Réessayer",
   "order_type_title": "Type de commande",
   "order_type_question": "Comment souhaitez-vous commander ?",
   "order_type_dine_in": "Sur Place",
