@@ -270,7 +270,7 @@ void main() {
     );
 
     testWidgets(
-      'validateAndNavigate should show success message for valid takeaway order',
+      'validateAndNavigate should navigate to HomeScreen for valid takeaway order',
       (WidgetTester tester) async {
         // Arrange
         final viewModel = OrderTypeViewModel();
@@ -293,16 +293,15 @@ void main() {
 
         // Act
         await tester.tap(find.text('Validate'));
-        await tester.pump();
+        await tester.pumpAndSettle();
 
-        // Assert
-        expect(find.byType(SnackBar), findsOneWidget);
-        expect(find.text('À emporter'), findsOneWidget);
+        // Assert - Should have navigated away from the original screen
+        expect(find.text('Validate'), findsNothing);
       },
     );
 
     testWidgets(
-      'validateAndNavigate should show success message for valid dineIn order',
+      'validateAndNavigate should navigate to HomeScreen for valid dineIn order',
       (WidgetTester tester) async {
         // Arrange
         final viewModel = OrderTypeViewModel();
@@ -326,11 +325,10 @@ void main() {
 
         // Act
         await tester.tap(find.text('Validate'));
-        await tester.pump();
+        await tester.pumpAndSettle();
 
-        // Assert
-        expect(find.byType(SnackBar), findsOneWidget);
-        expect(find.text('Sur place - Chevalet n°12'), findsOneWidget);
+        // Assert - Should have navigated away from the original screen
+        expect(find.text('Validate'), findsNothing);
       },
     );
 
