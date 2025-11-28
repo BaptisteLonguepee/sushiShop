@@ -39,7 +39,7 @@ void main() {
       );
     });
 
-    testWidgets('navigateToNextScreen should show SnackBar', (
+    testWidgets('navigateToNextScreen should navigate to OrderTypeScreen', (
       WidgetTester tester,
     ) async {
       // Arrange
@@ -63,10 +63,10 @@ void main() {
 
       // Act
       await tester.tap(find.text('Test Button'));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
-      // Assert
-      expect(find.text('Navigation à implémenter'), findsOneWidget);
+      // Assert - Should have navigated to a new screen
+      expect(find.text('Test Button'), findsNothing);
     });
   });
 
@@ -165,7 +165,7 @@ void main() {
       expect(buttonSizedBox.height, greaterThanOrEqualTo(60));
     });
 
-    testWidgets('Tapping button should show SnackBar', (
+    testWidgets('Tapping button should navigate to next screen', (
       WidgetTester tester,
     ) async {
       // Arrange
@@ -174,11 +174,10 @@ void main() {
 
       // Act
       await tester.tap(find.byType(ElevatedButton));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
-      // Assert
-      expect(find.text('Navigation à implémenter'), findsOneWidget);
-      expect(find.byType(SnackBar), findsOneWidget);
+      // Assert - Should have navigated away from WelcomeScreen
+      expect(find.text('Toucher pour commencer'), findsNothing);
     });
 
     testWidgets('WelcomeScreen should have Stack with StackFit.expand', (
@@ -278,15 +277,10 @@ void main() {
 
       // Act - Tap button
       await tester.tap(find.byType(ElevatedButton));
-      await tester.pump();
-
-      // Assert - SnackBar appears
-      expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.text('Navigation à implémenter'), findsOneWidget);
-
-      // Wait for SnackBar to disappear
-      await tester.pump(const Duration(seconds: 2));
       await tester.pumpAndSettle();
+
+      // Assert - Should have navigated to next screen
+      expect(find.text('Toucher pour commencer'), findsNothing);
     });
   });
 }
