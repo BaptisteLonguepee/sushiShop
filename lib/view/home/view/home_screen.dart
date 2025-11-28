@@ -45,9 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // État de chargement
           if (viewModel.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: AppColor.primaryColor,
-              ),
+              child: CircularProgressIndicator(color: AppColor.primaryColor),
             );
           }
 
@@ -65,18 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 16),
                   Text(
                     localizations.errorLoadingProducts,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black54,
-                    ),
+                    style: const TextStyle(fontSize: 18, color: Colors.black54),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     viewModel.errorMessage!,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black38,
-                    ),
+                    style: const TextStyle(fontSize: 14, color: Colors.black38),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
@@ -107,10 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 16),
                   Text(
                     localizations.noProducts,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black54,
-                    ),
+                    style: const TextStyle(fontSize: 18, color: Colors.black54),
                   ),
                 ],
               ),
@@ -134,12 +123,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 16),
                 Expanded(
                   child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.75,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.75,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                        ),
                     itemCount: viewModel.products.length,
                     itemBuilder: (context, index) {
                       final product = viewModel.products[index];
@@ -163,10 +153,7 @@ class _ProductCard extends StatelessWidget {
   final String name;
   final double price;
 
-  const _ProductCard({
-    required this.name,
-    required this.price,
-  });
+  const _ProductCard({required this.name, required this.price});
 
   @override
   Widget build(BuildContext context) {

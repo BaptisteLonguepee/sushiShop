@@ -29,9 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => HomeViewModel()),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => HomeViewModel())],
       child: MaterialApp(
         title: 'Sushi Shop',
         localizationsDelegates: const [
