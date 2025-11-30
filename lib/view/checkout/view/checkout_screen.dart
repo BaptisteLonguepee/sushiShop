@@ -3,10 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constant/color.dart';
 import '../../../core/providers/cart_provider.dart';
-import '../../../data/model/commande_model.dart';
-import '../../../data/model/commande_article_model.dart';
-import '../../../data/repository/commande_repository.dart';
-import '../../confirmation/view/confirmation_screen.dart';
+import '../../qr_scan/view/qr_scan_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -16,8 +13,6 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final _commandeRepository = CommandeRepository();
-  bool _isProcessing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -134,104 +129,31 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: _isProcessing ? null : () => _submitOrder(cart),
+        onPressed: () => _proceedToQrScan(cart),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColor.primaryColor,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          disabledBackgroundColor: Colors.grey[400],
         ),
-        child: _isProcessing
-            ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2,
-                ),
-              )
-            : Text(
-                'Valider la commande',
-                style: GoogleFonts.kaiseiOpti(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+        child: Text(
+          'Scanner le QR Code de la table',
+          style: GoogleFonts.kaiseiOpti(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
 
-  Future<void> _submitOrder(CartProvider cart) async {
-    setState(() {
-      _isProcessing = true;
-    });
-
-    try {
-      // Générer un numéro de commande
-      final numeroCommande = await _commandeRepository.generateNumeroCommande();
-
-      // Créer la commande sans informations client (borne de commande rapide)
-      final commande = Commande(
-        id: 0, // sera assigné par la base de données
-        numeroCommande: numeroCommande,
-        statut: 'en_attente',
-        total: cart.total,
-        nomClient: 'Client Borne $numeroCommande',
-        telephone: null,
-        email: null,
-        notesSpecial: null,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
-
-      final createdCommande = await _commandeRepository.createCommande(commande);
-
-      // Ajouter les articles
-      final articles = cart.items.map((item) {
-        return CommandeArticle(
-          id: 0,
-          commandeId: createdCommande.id,
-          produitId: item.product.id,
-          quantite: item.quantity,
-          prixUnitaire: item.product.prix,
-          notesArticle: item.notes,
-          createdAt: DateTime.now(),
-        );
-      }).toList();
-
-      await _commandeRepository.addArticles(articles);
-
-      // Vider le panier
-      cart.clear();
-
-      // Naviguer vers l'écran de confirmation
-      if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ConfirmationScreen(commande: createdCommande),
-          ),
-          (route) => false,
-        );
-      }
-    } catch (e) {
-      setState(() {
-        _isProcessing = false;
-      });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Erreur lors de la création de la commande: $e',
-              style: GoogleFonts.kaiseiOpti(),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
+  void _proceedToQrScan(CartProvider cart) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QrScanScreen(totalAmount: cart.total),
+      ),
+    );
   }
 }

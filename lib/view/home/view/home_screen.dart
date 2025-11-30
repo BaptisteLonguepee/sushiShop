@@ -5,6 +5,7 @@ import 'package:sushishop/core/constant/color.dart';
 import 'package:sushishop/data/model/product_model.dart';
 import 'package:sushishop/core/providers/cart_provider.dart';
 import 'package:sushishop/view/cart/view/cart_screen.dart';
+import 'package:sushishop/view/product_detail/view/product_detail_screen.dart';
 import '../../../l10n/app_localizations.dart';
 import '../viewmodel/home_viewmodel.dart';
 
@@ -440,6 +441,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showProductDetails(BuildContext context, Product product) {
+    // Naviguer vers la page de détails du produit
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProductDetailScreen(product: product),
+      ),
+    );
+    
+    /* Ancien dialog - remplacé par la page complète
     final localizations = AppLocalizations.of(context)!;
     int quantity = 1;
 
@@ -750,7 +760,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         );
       },
-    );
+    ); */
   }
 }
 
