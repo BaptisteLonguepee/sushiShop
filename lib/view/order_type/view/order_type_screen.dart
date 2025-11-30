@@ -15,7 +15,6 @@ class OrderTypeScreen extends StatefulWidget {
 class _OrderTypeScreenState extends State<OrderTypeScreen>
     with SingleTickerProviderStateMixin {
   late final OrderTypeViewModel _viewModel;
-  final TextEditingController _tableNumberController = TextEditingController();
   late AnimationController _animationController;
 
   @override
@@ -38,7 +37,6 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
   void dispose() {
     _viewModel.removeListener(_onViewModelChanged);
     _viewModel.dispose();
-    _tableNumberController.dispose();
     _animationController.dispose();
     super.dispose();
   }
@@ -106,12 +104,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                         ),
                       ),
 
-                      const SizedBox(height: 20),
-
-                      // Champ numéro de chevalet
-                      _buildTableNumberSection(localizations),
-
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 30),
 
                       // Bouton Continuer
                       _buildContinueButton(localizations, size),
@@ -257,96 +250,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
     );
   }
 
-  Widget _buildTableNumberSection(AppLocalizations? localizations) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-      height: _viewModel.selectedOrderType == OrderType.dineIn ? 140 : 0,
-      child: AnimatedOpacity(
-        opacity: _viewModel.selectedOrderType == OrderType.dineIn ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 300),
-        child: _viewModel.selectedOrderType == OrderType.dineIn
-            ? Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: AppColor.primaryColor, width: 2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColor.primaryColor.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.pin_outlined,
-                          color: AppColor.primaryColor,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          localizations?.order_type_table_number ?? 'Numéro de chevalet',
-                          style: GoogleFonts.kaiseiOpti(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.darkRed,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: _tableNumberController,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.kaiseiOpti(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: AppColor.primaryColor,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: '00',
-                        hintStyle: TextStyle(
-                          color: AppColor.cardColor.withOpacity(0.5),
-                        ),
-                        filled: true,
-                        fillColor: AppColor.secondaryColor,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: AppColor.cardColor, width: 2),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
-                        ),
-                      ),
-                      onChanged: (value) {
-                        final number = int.tryParse(value);
-                        _viewModel.setTableNumber(number);
-                      },
-                    ),
-                  ],
-                ),
-              )
-            : const SizedBox.shrink(),
-      ),
-    );
-  }
+
 
   Widget _buildContinueButton(AppLocalizations? localizations, Size size) {
     return Container(
