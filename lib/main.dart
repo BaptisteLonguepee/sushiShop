@@ -49,54 +49,54 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: const [Locale('en'), Locale('fr')],
-        theme: ThemeData(
-          useMaterial3: true,
-          textTheme: GoogleFonts.kaiseiOptiTextTheme(),
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFFB1464A),
-            primary: const Color(0xFFB1464A),
-            secondary: const Color(0xFFDFDFDF),
-            background: const Color(0xFFF5F5F5),
-            surface: Colors.white,
-          ),
-          scaffoldBackgroundColor: const Color(0xFFDFDFDF),
-          appBarTheme: AppBarTheme(
-            backgroundColor: const Color(0xFFB1464A),
-            foregroundColor: Colors.white,
-            centerTitle: true,
-            elevation: 0,
-            titleTextStyle: GoogleFonts.kaiseiOpti(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFB1464A),
-              foregroundColor: Colors.white,
-              textStyle: GoogleFonts.kaiseiOpti(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+            theme: ThemeData(
+              useMaterial3: true,
+              textTheme: GoogleFonts.kaiseiOptiTextTheme(),
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFFB1464A),
+                primary: const Color(0xFFB1464A),
+                secondary: const Color(0xFFDFDFDF),
+                background: const Color(0xFFF5F5F5),
+                surface: Colors.white,
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+              scaffoldBackgroundColor: const Color(0xFFDFDFDF),
+              appBarTheme: AppBarTheme(
+                backgroundColor: const Color(0xFFB1464A),
+                foregroundColor: Colors.white,
+                centerTitle: true,
+                elevation: 0,
+                titleTextStyle: GoogleFonts.kaiseiOpti(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 32,
-                vertical: 16,
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFB1464A),
+                  foregroundColor: Colors.white,
+                  textStyle: GoogleFonts.kaiseiOpti(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                ),
+              ),
+              cardTheme: CardThemeData(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: const BorderSide(color: Color(0xFFD4AF37), width: 2),
+                ),
               ),
             ),
-          ),
-          cardTheme: CardThemeData(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-              side: const BorderSide(color: Color(0xFFD4AF37), width: 2),
-            ),
-          ),
-        ),
-        home: const WelcomeScreen(),
+            home: const WelcomeScreen(),
           );
         },
       ),

@@ -16,23 +16,8 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _nomController = TextEditingController();
-  final _telephoneController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _notesController = TextEditingController();
   final _commandeRepository = CommandeRepository();
-
   bool _isProcessing = false;
-
-  @override
-  void dispose() {
-    _nomController.dispose();
-    _telephoneController.dispose();
-    _emailController.dispose();
-    _notesController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +27,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       backgroundColor: AppColor.secondaryColor,
       appBar: AppBar(
         title: Text(
-          'Finaliser la commande',
+          'Vérifier la commande',
           style: GoogleFonts.kaiseiOpti(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -53,59 +38,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSectionTitle('Vos informations'),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _nomController,
-                label: 'Nom complet',
-                icon: Icons.person,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer votre nom';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _telephoneController,
-                label: 'Téléphone',
-                icon: Icons.phone,
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer votre numéro de téléphone';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _emailController,
-                label: 'Email (optionnel)',
-                icon: Icons.email,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: 24),
-              _buildSectionTitle('Notes spéciales'),
-              const SizedBox(height: 16),
-              _buildTextField(
-                controller: _notesController,
-                label: 'Allergies, préférences...',
-                icon: Icons.note,
-                maxLines: 3,
-              ),
-              const SizedBox(height: 32),
-              _buildOrderSummary(cart),
-              const SizedBox(height: 32),
-              _buildSubmitButton(cart),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSectionTitle('Résumé de la commande'),
+            const SizedBox(height: 16),
+            _buildOrderSummary(cart),
+            const SizedBox(height: 32),
+            _buildSubmitButton(cart),
+          ],
         ),
       ),
     );
@@ -119,46 +60,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         fontWeight: FontWeight.bold,
         color: AppColor.primaryColor,
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    TextInputType? keyboardType,
-    int maxLines = 1,
-    String? Function(String?)? validator,
-  }) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      maxLines: maxLines,
-      validator: validator,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: GoogleFonts.kaiseiOpti(),
-        prefixIcon: Icon(icon, color: AppColor.primaryColor),
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.red),
-        ),
-      ),
-      style: GoogleFonts.kaiseiOpti(),
     );
   }
 
@@ -263,10 +164,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Future<void> _submitOrder(CartProvider cart) async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
     setState(() {
       _isProcessing = true;
     });
@@ -275,16 +172,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       // Générer un numéro de commande
       final numeroCommande = await _commandeRepository.generateNumeroCommande();
 
-      // Créer la commande
+      // Créer la commande sans informations client (borne de commande rapide)
       final commande = Commande(
         id: 0, // sera assigné par la base de données
         numeroCommande: numeroCommande,
         statut: 'en_attente',
         total: cart.total,
-        nomClient: _nomController.text,
-        telephone: _telephoneController.text,
-        email: _emailController.text.isEmpty ? null : _emailController.text,
-        notesSpecial: _notesController.text.isEmpty ? null : _notesController.text,
+        nomClient: 'Client Borne $numeroCommande',
+        telephone: null,
+        email: null,
+        notesSpecial: null,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );

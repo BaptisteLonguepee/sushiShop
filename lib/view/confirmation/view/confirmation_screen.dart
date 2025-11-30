@@ -89,18 +89,6 @@ class ConfirmationScreen extends StatelessWidget {
                           '${commande.total.toStringAsFixed(2)} €',
                           valueColor: AppColor.primaryColor,
                         ),
-                        const SizedBox(height: 12),
-                        _buildDetailRow(
-                          'Téléphone',
-                          commande.telephone ?? 'Non renseigné',
-                        ),
-                        if (commande.email != null) ...[
-                          const SizedBox(height: 12),
-                          _buildDetailRow(
-                            'Email',
-                            commande.email!,
-                          ),
-                        ],
                         const Divider(height: 24),
                         Container(
                           padding: const EdgeInsets.all(16),
