@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sushishop/core/constant/color.dart';
 import 'package:sushishop/data/model/product_model.dart';
+import 'package:sushishop/core/providers/cart_provider.dart';
+import 'package:sushishop/view/cart/view/cart_screen.dart';
 import '../../../l10n/app_localizations.dart';
 import '../viewmodel/home_viewmodel.dart';
 
@@ -14,14 +16,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _selectedCategory = 'Tous';
-
   @override
   void initState() {
     super.initState();
-    // Charger les produits au démarrage
+    // Charger les produits et catégories au démarrage
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomeViewModel>().fetchProducts();
+      context.read<HomeViewModel>().initialize();
     });
   }
 
@@ -125,40 +125,46 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   // Bouton panier
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColor.primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        // TODO: Naviguer vers le panier
-                      },
-                      icon: Stack(
-                        children: [
-                          const Icon(Icons.shopping_cart, color: Colors.white, size: 24),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                              child: Text(
-                                '0',
-                                style: GoogleFonts.kaiseiOpti(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.primaryColor,
+                  Consumer<CartProvider>(
+                    builder: (context, cart, _) => Container(
+                      decoration: BoxDecoration(
+                        color: AppColor.primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const CartScreen()),
+                          );
+                        },
+                        icon: Stack(
+                          children: [
+                            const Icon(Icons.shopping_cart, color: Colors.white, size: 24),
+                            if (cart.itemCount > 0)
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                                  child: Text(
+                                    '${cart.itemCount}',
+                                    style: GoogleFonts.kaiseiOpti(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.primaryColor,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
                               ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -175,55 +181,89 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildCategoryBar() {
-    final categories = ['Tous', 'Sushis', 'Makis', 'Sashimis', 'Boissons'];
+    return Consumer<HomeViewModel>(
+      builder: (context, viewModel, _) {
+        if (viewModel.categories.isEmpty) {
+          return const SizedBox.shrink();
+        }
 
-    return Container(
-      height: 55,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      decoration: const BoxDecoration(
-        color: AppColor.secondaryColor,
-      ),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          final category = categories[index];
-          final isSelected = category == _selectedCategory;
-
-          return Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedCategory = category;
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected ? AppColor.primaryColor : Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: isSelected ? AppColor.primaryColor : AppColor.cardColor,
-                    width: 2,
+        return Container(
+          height: 55,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: const BoxDecoration(
+            color: AppColor.secondaryColor,
+          ),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: viewModel.categories.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                // Bouton "Tous"
+                final isSelected = viewModel.selectedCategory == null;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: GestureDetector(
+                    onTap: () => viewModel.selectCategory(null),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColor.primaryColor : Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: isSelected ? AppColor.primaryColor : AppColor.cardColor,
+                          width: 2,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Tous',
+                          style: GoogleFonts.kaiseiOpti(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: isSelected ? Colors.white : AppColor.cardColor,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                child: Center(
-                  child: Text(
-                    category,
-                    style: GoogleFonts.kaiseiOpti(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: isSelected ? Colors.white : AppColor.cardColor,
+                );
+              }
+
+              final category = viewModel.categories[index - 1];
+              final isSelected = viewModel.selectedCategory?.id == category.id;
+
+              return Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: GestureDetector(
+                  onTap: () => viewModel.selectCategory(category),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected ? AppColor.primaryColor : Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isSelected ? AppColor.primaryColor : AppColor.cardColor,
+                        width: 2,
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        category.nom,
+                        style: GoogleFonts.kaiseiOpti(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: isSelected ? Colors.white : AppColor.cardColor,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -328,66 +368,72 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildFooter() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -3),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Total',
-                    style: GoogleFonts.kaiseiOpti(
-                      fontSize: 14,
-                      color: AppColor.cardColor,
-                    ),
-                  ),
-                  Text(
-                    '0.00 €',
-                    style: GoogleFonts.kaiseiOpti(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.primaryColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Naviguer vers la validation de commande
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColor.primaryColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: Text(
-                'Commander',
-                style: GoogleFonts.kaiseiOpti(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+    return Consumer<CartProvider>(
+      builder: (context, cart, _) => Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -3),
             ),
           ],
+        ),
+        child: SafeArea(
+          top: false,
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Total',
+                      style: GoogleFonts.kaiseiOpti(
+                        fontSize: 14,
+                        color: AppColor.cardColor,
+                      ),
+                    ),
+                    Text(
+                      '${cart.total.toStringAsFixed(2)} €',
+                      style: GoogleFonts.kaiseiOpti(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.primaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: cart.isEmpty ? null : () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CartScreen()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColor.primaryColor,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  disabledBackgroundColor: Colors.grey[300],
+                ),
+                child: Text(
+                  'Commander',
+                  style: GoogleFonts.kaiseiOpti(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -400,7 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       barrierColor: Colors.black.withOpacity(0.7),
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return StatefulBuilder(
           builder: (context, setState) {
             return Dialog(
@@ -427,11 +473,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Stack(
                         children: [
                           Center(
-                            child: Icon(
-                              Icons.restaurant_menu,
-                              size: 80,
-                              color: AppColor.primaryColor,
-                            ),
+                            child: product.imageUrl != null
+                                ? Image.network(
+                                    product.imageUrl!,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    errorBuilder: (context, error, stackTrace) =>
+                                        Icon(
+                                          Icons.restaurant_menu,
+                                          size: 80,
+                                          color: AppColor.primaryColor,
+                                        ),
+                                  )
+                                : Icon(
+                                    Icons.restaurant_menu,
+                                    size: 80,
+                                    color: AppColor.primaryColor,
+                                  ),
                           ),
                           Positioned(
                             top: 12,
@@ -464,21 +522,82 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           // Nom du produit
                           Text(
-                            product.name,
+                            product.nom,
                             style: GoogleFonts.kaiseiOpti(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
                               color: AppColor.darkRed,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'ID: ${product.id}',
-                            style: GoogleFonts.kaiseiOpti(
-                              fontSize: 14,
-                              color: AppColor.cardColor,
+                          if (product.description != null) ...[
+                            const SizedBox(height: 8),
+                            Text(
+                              product.description!,
+                              style: GoogleFonts.kaiseiOpti(
+                                fontSize: 14,
+                                color: AppColor.cardColor,
+                              ),
                             ),
-                          ),
+                          ],
+                          if (product.allergens != null) ...[
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(Icons.warning_amber, size: 16, color: Colors.orange[700]),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    'Allergènes: ${product.allergens}',
+                                    style: GoogleFonts.kaiseiOpti(
+                                      fontSize: 12,
+                                      color: Colors.orange[700],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                          if (product.vegetarien || product.vegan) ...[
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                if (product.vegan)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green[100],
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      'Vegan',
+                                      style: GoogleFonts.kaiseiOpti(
+                                        fontSize: 12,
+                                        color: Colors.green[900],
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                if (product.vegetarien && !product.vegan) ...[
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green[100],
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      'Végétarien',
+                                      style: GoogleFonts.kaiseiOpti(
+                                        fontSize: 12,
+                                        color: Colors.green[900],
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ],
                           const SizedBox(height: 24),
 
                           // Prix
@@ -490,7 +609,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                '${product.price.toStringAsFixed(2)} €',
+                                '${product.prix.toStringAsFixed(2)} €',
                                 style: GoogleFonts.kaiseiOpti(
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
@@ -563,7 +682,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 55,
                             child: ElevatedButton(
                               onPressed: () {
+                                // Ajouter au panier
+                                context.read<CartProvider>().addItem(product, quantity: quantity);
                                 Navigator.of(context).pop();
+                                
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Row(
@@ -575,7 +697,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         const SizedBox(width: 12),
                                         Expanded(
                                           child: Text(
-                                            '$quantity x ${product.name} ajouté au panier',
+                                            '$quantity x ${product.nom} ajouté au panier',
                                             style: GoogleFonts.kaiseiOpti(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
@@ -585,7 +707,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     ),
                                     backgroundColor: AppColor.success,
-                                    duration: const Duration(seconds: 3),
+                                    duration: const Duration(seconds: 2),
                                     behavior: SnackBarBehavior.floating,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -731,7 +853,7 @@ class _ProductCardState extends State<_ProductCard>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.product.name,
+                        widget.product.nom,
                         style: GoogleFonts.kaiseiOpti(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -744,7 +866,7 @@ class _ProductCardState extends State<_ProductCard>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '${widget.product.price.toStringAsFixed(2)} €',
+                            '${widget.product.prix.toStringAsFixed(2)} €',
                             style: GoogleFonts.kaiseiOpti(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

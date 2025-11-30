@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sushishop/view/welcome/view/welcome_screen.dart';
 import 'package:sushishop/view/home/viewmodel/home_viewmodel.dart';
 import 'package:sushishop/core/providers/locale_provider.dart';
+import 'package:sushishop/core/providers/cart_provider.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async {
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: Consumer<LocaleProvider>(
         builder: (context, localeProvider, child) {
