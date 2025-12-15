@@ -7,7 +7,6 @@ import '../../../data/model/commande_model.dart';
 import '../../../data/model/commande_article_model.dart';
 import '../../../data/repository/commande_repository.dart';
 import '../../confirmation/view/confirmation_screen.dart';
-import 'dart:math';
 
 class PaymentScreen extends StatefulWidget {
   final double totalAmount;
@@ -308,41 +307,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required String hint,
-    required IconData icon,
-    TextInputType? keyboardType,
-  }) {
-    return TextField(
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        labelStyle: GoogleFonts.kaiseiOpti(),
-        hintStyle: GoogleFonts.kaiseiOpti(color: Colors.grey),
-        prefixIcon: Icon(icon, color: AppColor.primaryColor),
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[300]!),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
-        ),
-      ),
-      style: GoogleFonts.kaiseiOpti(),
-    );
-  }
-
   Widget _buildPaymentButton() {
     return SizedBox(
       width: double.infinity,
@@ -382,8 +346,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
               )
             : Text(
                 _selectedPaymentMethod == 'card'
-                    ? 'Lancer le paiement ${widget.totalAmount.toStringAsFixed(2)} €'
-                    : 'Valider la commande',
+                    ? 'Process payment ${widget.totalAmount.toStringAsFixed(2)} €'
+                    : 'Validate order',
                 style: GoogleFonts.kaiseiOpti(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -398,22 +362,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
       _isProcessing = true;
     });
 
-    // Simuler la communication avec le TPE (Terminal de Paiement Électronique)
-    // Attente de 3 secondes pour simuler le traitement
+    // Get cart reference before async gap
+    final cart = context.read<CartProvider>();
+
+    // Simulate communication with payment terminal
+    // Wait 3 seconds to simulate processing
     await Future.delayed(const Duration(seconds: 3));
 
-    // Pour une borne, le paiement est toujours accepté (simulation)
-    // Dans un vrai système, cela communiquerait avec le TPE via API
-    final isSuccess = true;
-
-    // Créer la commande
+    // Create order
     try {
-      final cart = context.read<CartProvider>();
-      final numeroCommande = await _commandeRepository.generateNumeroCommande();
+      final orderNumber = await _commandeRepository.generateNumeroCommande();
 
       final commande = Commande(
         id: 0,
-        numeroCommande: numeroCommande,
+        numeroCommande: orderNumber,
         statut: 'confirmee',
         total: widget.totalAmount,
         nomClient: 'Table ${widget.tableNumber}',
@@ -424,12 +386,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
         updatedAt: DateTime.now(),
       );
 
-      final createdCommande = await _commandeRepository.createCommande(commande);
+      final createdOrder = await _commandeRepository.createCommande(commande);
 
       final articles = cart.items.map((item) {
         return CommandeArticle(
           id: 0,
-          commandeId: createdCommande.id,
+          commandeId: createdOrder.id,
           produitId: item.product.id,
           quantite: item.quantity,
           prixUnitaire: item.product.prix,
@@ -442,62 +404,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
       cart.clear();
 
-      if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ConfirmationScreen(commande: createdCommande),
-          ),
-          (route) => false,
-        );
-      }
+      if (!mounted) return;
+      
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ConfirmationScreen(commande: createdOrder),
+        ),
+        (route) => false,
+      );
     } catch (e) {
       setState(() {
         _isProcessing = false;
       });
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Erreur lors de la création de la commande: $e',
-              style: GoogleFonts.kaiseiOpti(),
-            ),
-            backgroundColor: Colors.red,
+      if (!mounted) return;
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Error creating order: $e',
+            style: GoogleFonts.kaiseiOpti(),
           ),
-        );
-      }
+          backgroundColor: Colors.red,
+        ),
+      );
     }
-  }
-
-  void _showPaymentErrorDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            const Icon(Icons.error_outline, color: Colors.red, size: 30),
-            const SizedBox(width: 12),
-            Text(
-              'Paiement refusé',
-              style: GoogleFonts.kaiseiOpti(fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        content: Text(
-          'Le paiement a été refusé. Veuillez vérifier vos informations et réessayer.',
-          style: GoogleFonts.kaiseiOpti(),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              'Réessayer',
-              style: GoogleFonts.kaiseiOpti(color: AppColor.primaryColor),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

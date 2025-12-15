@@ -47,7 +47,6 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: Container(
@@ -63,23 +62,20 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
         ),
         child: Stack(
           children: [
-            // Motif de fond
             const Positioned.fill(
               child: JapanesePattern(opacity: 0.02),
             ),
 
-            // Contenu principal
             SafeArea(
               child: Column(
                 children: [
-                  // Header moderne
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       gradient: AppColor.primaryGradient,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColor.primaryColor.withOpacity(0.3),
+                          color: AppColor.primaryColor.withValues(alpha: 0.3),
                           blurRadius: 15,
                           offset: const Offset(0, 5),
                         ),
@@ -91,7 +87,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: IconButton(
@@ -109,7 +105,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                               ),
                             ),
                             const Spacer(),
-                            const SizedBox(width: 48), // Équilibrage
+                            const SizedBox(width: 48), // Balance
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -119,7 +115,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                             vertical: 10,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Text(
@@ -142,10 +138,9 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                         children: [
                           const SizedBox(height: 20),
 
-                          // Titre de la question
                           Text(
                             localizations?.order_type_question ??
-                                'Comment souhaitez-vous commander ?',
+                                'How would you like to order?',
                             style: GoogleFonts.notoSans(
                               fontSize: 26,
                               fontWeight: FontWeight.bold,
@@ -157,14 +152,13 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
 
                           const SizedBox(height: 40),
 
-                          // Grands boutons style borne
                           _buildLargeOrderTypeButton(
                             context,
                             type: OrderType.dineIn,
                             icon: Icons.restaurant,
                             iconBg: const Color(0xFFFFE5E5),
-                            label: localizations?.order_type_dine_in ?? 'Sur Place',
-                            sublabel: 'Manger sur place',
+                            label: localizations?.order_type_dine_in ?? 'Dine In',
+                            sublabel: 'Eat here',
                             isSelected: _viewModel.selectedOrderType == OrderType.dineIn,
                           ),
 
@@ -175,14 +169,13 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                             type: OrderType.takeaway,
                             icon: Icons.shopping_bag_outlined,
                             iconBg: const Color(0xFFFFF4E0),
-                            label: localizations?.order_type_takeaway ?? 'À Emporter',
-                            sublabel: 'Commander à emporter',
+                            label: localizations?.order_type_takeaway ?? 'Takeaway',
+                            sublabel: 'Order to go',
                             isSelected: _viewModel.selectedOrderType == OrderType.takeaway,
                           ),
 
                           const SizedBox(height: 40),
 
-                          // Zone de saisie numéro de chevalet (animée)
                           AnimatedSize(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
@@ -195,14 +188,13 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                     ),
                   ),
 
-                  // Bouton de validation fixe en bas
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 10,
                           offset: const Offset(0, -5),
                         ),
@@ -250,14 +242,14 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
             boxShadow: [
               if (isSelected)
                 BoxShadow(
-                  color: AppColor.primaryColor.withOpacity(0.4),
+                  color: AppColor.primaryColor.withValues(alpha: 0.4),
                   blurRadius: 20,
                   spreadRadius: 2,
                   offset: const Offset(0, 8),
                 )
               else
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -265,13 +257,12 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
           ),
           child: Row(
             children: [
-              // Icône dans un conteneur
               AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: isSelected 
-                      ? Colors.white.withOpacity(0.25) 
+                      ? Colors.white.withValues(alpha: 0.25) 
                       : iconBg,
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -283,8 +274,6 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
               ),
 
               const SizedBox(width: 24),
-
-              // Texte
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,15 +292,13 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                       style: GoogleFonts.notoSans(
                         fontSize: 16,
                         color: isSelected 
-                            ? Colors.white.withOpacity(0.9)
+                            ? Colors.white.withValues(alpha: 0.9)
                             : AppColor.cardColor,
                       ),
                     ),
                   ],
                 ),
               ),
-
-              // Checkmark
               AnimatedScale(
                 scale: isSelected ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 300),
@@ -344,7 +331,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
         border: Border.all(color: AppColor.gold, width: 2),
         boxShadow: [
           BoxShadow(
-            color: AppColor.gold.withOpacity(0.2),
+            color: AppColor.gold.withValues(alpha: 0.2),
             blurRadius: 15,
             offset: const Offset(0, 5),
           ),
@@ -362,7 +349,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
               ),
               const SizedBox(width: 12),
               Text(
-                localizations?.order_type_table_number ?? 'Numéro de chevalet',
+                localizations?.order_type_table_number ?? 'Table number',
                 style: GoogleFonts.notoSans(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -373,13 +360,11 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
           ),
           
           const SizedBox(height: 24),
-
-          // Champ de saisie stylisé
           Container(
             decoration: BoxDecoration(
-              color: AppColor.lightGold.withOpacity(0.3),
+              color: AppColor.lightGold.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColor.gold.withOpacity(0.3)),
+              border: Border.all(color: AppColor.gold.withValues(alpha: 0.3)),
             ),
             child: TextField(
               controller: _tableNumberController,
@@ -395,7 +380,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                 hintStyle: GoogleFonts.notoSans(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
-                  color: AppColor.cardColor.withOpacity(0.3),
+                  color: AppColor.cardColor.withValues(alpha: 0.3),
                 ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(
@@ -414,7 +399,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
 
           Text(
             localizations?.order_type_enter_table_number ?? 
-                'Entrez votre numéro de chevalet',
+                'Enter your table number',
             style: GoogleFonts.notoSans(
               fontSize: 14,
               color: AppColor.cardColor,
@@ -440,7 +425,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
         boxShadow: isValid
             ? [
                 BoxShadow(
-                  color: AppColor.primaryColor.withOpacity(0.4),
+                  color: AppColor.primaryColor.withValues(alpha: 0.4),
                   blurRadius: 15,
                   offset: const Offset(0, 5),
                 ),

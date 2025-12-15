@@ -47,7 +47,6 @@ class MyApp extends StatelessWidget {
         ],
         supportedLocales: const [Locale('en'), Locale('fr')],
         theme: ThemeData(
-          // Polices de caractères avec thème japonais
           textTheme: GoogleFonts.notoSansTextTheme().copyWith(
             displayLarge: GoogleFonts.notoSerif(
               fontSize: 96,
@@ -99,22 +98,18 @@ class MyApp extends StatelessWidget {
             ),
           ),
 
-          // Palette de couleurs
           colorScheme: ColorScheme.fromSeed(
             seedColor: AppColor.primaryColor,
             primary: AppColor.primaryColor,
             secondary: AppColor.gold,
             surface: Colors.white,
-            background: AppColor.cream,
             error: AppColor.error,
             onPrimary: Colors.white,
             onSecondary: AppColor.black,
             onSurface: AppColor.black,
-            onBackground: AppColor.black,
             onError: Colors.white,
           ),
 
-          // Configuration de l'AppBar
           appBarTheme: AppBarTheme(
             elevation: 0,
             centerTitle: true,
@@ -131,13 +126,12 @@ class MyApp extends StatelessWidget {
             ),
           ),
 
-          // Configuration des boutons élevés
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColor.primaryColor,
               foregroundColor: Colors.white,
               elevation: 4,
-              shadowColor: AppColor.primaryColor.withOpacity(0.3),
+              shadowColor: AppColor.primaryColor.withValues(alpha: 0.3),
               padding: const EdgeInsets.symmetric(
                 horizontal: 24,
                 vertical: 16,
@@ -153,7 +147,6 @@ class MyApp extends StatelessWidget {
             ),
           ),
 
-          // Configuration des boutons texte
           textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(
               foregroundColor: AppColor.primaryColor,
@@ -164,34 +157,32 @@ class MyApp extends StatelessWidget {
             ),
           ),
 
-          // Configuration des cartes
           cardTheme: CardThemeData(
             elevation: 4,
-            shadowColor: Colors.black.withOpacity(0.1),
+            shadowColor: Colors.black.withValues(alpha: 0.1),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
               side: BorderSide(
-                color: AppColor.gold.withOpacity(0.2),
+                color: AppColor.gold.withValues(alpha: 0.2),
                 width: 2,
               ),
             ),
             color: Colors.white,
           ),
 
-          // Configuration des champs de texte
           inputDecorationTheme: InputDecorationTheme(
             filled: true,
-            fillColor: AppColor.lightGold.withOpacity(0.3),
+            fillColor: AppColor.lightGold.withValues(alpha: 0.3),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(
-                color: AppColor.gold.withOpacity(0.3),
+                color: AppColor.gold.withValues(alpha: 0.3),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(
-                color: AppColor.gold.withOpacity(0.3),
+                color: AppColor.gold.withValues(alpha: 0.3),
               ),
             ),
             focusedBorder: OutlineInputBorder(
@@ -215,11 +206,10 @@ class MyApp extends StatelessWidget {
               color: AppColor.cardColor,
             ),
             hintStyle: GoogleFonts.notoSans(
-              color: AppColor.cardColor.withOpacity(0.6),
+              color: AppColor.cardColor.withValues(alpha: 0.6),
             ),
           ),
 
-          // Configuration des dialogues
           dialogTheme: DialogThemeData(
             elevation: 10,
             backgroundColor: Colors.white,
@@ -237,7 +227,6 @@ class MyApp extends StatelessWidget {
             ),
           ),
 
-          // Configuration des Snackbars
           snackBarTheme: SnackBarThemeData(
             backgroundColor: AppColor.primaryColor,
             contentTextStyle: GoogleFonts.notoSans(
@@ -251,12 +240,10 @@ class MyApp extends StatelessWidget {
             ),
           ),
 
-          // Configuration des indicateurs de progression
           progressIndicatorTheme: const ProgressIndicatorThemeData(
             color: AppColor.primaryColor,
           ),
 
-          // Usability
           useMaterial3: true,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),

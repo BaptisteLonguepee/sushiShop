@@ -48,7 +48,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-    final screenHeight = MediaQuery.of(context).size.height;
+    // Removed unused variable screenHeight
 
     return Scaffold(
       body: Container(
@@ -93,7 +93,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         scale: _pulseAnimation.value,
                         child: Column(
                           children: [
-                            // Conteneur pour le logo avec bordure dorée
+                            // Logo container with gold border
                             Container(
                               width: 180,
                               height: 180,
@@ -102,7 +102,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                 gradient: AppColor.primaryGradient,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColor.primaryColor.withOpacity(0.4),
+                                    color: AppColor.primaryColor.withValues(alpha: 0.4),
                                     blurRadius: 30,
                                     spreadRadius: 5,
                                   ),
@@ -122,7 +122,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             ),
                             const SizedBox(height: 40),
 
-                            // Titre principal
+                            // Main title
                             Text(
                               'SUSHI SHOP',
                               style: GoogleFonts.notoSerif(
@@ -132,7 +132,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                 letterSpacing: 4,
                                 shadows: [
                                   Shadow(
-                                    color: AppColor.gold.withOpacity(0.3),
+                                    color: AppColor.gold.withValues(alpha: 0.3),
                                     offset: const Offset(2, 2),
                                     blurRadius: 4,
                                   ),
@@ -142,7 +142,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                             const SizedBox(height: 12),
 
-                            // Sous-titre en japonais
+                            // Japanese subtitle
                             Text(
                               '寿司ショップ',
                               style: GoogleFonts.notoSansJp(
@@ -160,11 +160,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                   const Spacer(flex: 1),
 
-                  // Message de bienvenue
+                  // Welcome message
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: Text(
-                      'Bienvenue chez Sushi Shop',
+                      'Welcome to Sushi Shop',
                       style: GoogleFonts.notoSans(
                         fontSize: 22,
                         color: AppColor.black,
@@ -177,7 +177,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                   const Spacer(flex: 2),
 
-                  // Bouton tactile style borne
+                  // Kiosk-style touch button
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: AnimatedBuilder(
@@ -190,7 +190,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColor.primaryColor.withOpacity(0.3),
+                                  color: AppColor.primaryColor.withValues(alpha: 0.3),
                                   blurRadius: 20,
                                   offset: const Offset(0, 10),
                                 ),
@@ -245,14 +245,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                   const SizedBox(height: 20),
 
-                  // Indicateur tactile
+                  // Touch indicator
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 12,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColor.lightGold.withOpacity(0.5),
+                      color: AppColor.lightGold.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Row(
@@ -265,7 +265,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'Touchez l\'écran pour commencer',
+                          'Touch the screen to start',
                           style: GoogleFonts.notoSans(
                             fontSize: 14,
                             color: AppColor.darkRed,

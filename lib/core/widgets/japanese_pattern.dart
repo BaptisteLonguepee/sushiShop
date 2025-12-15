@@ -17,7 +17,7 @@ class JapanesePattern extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _JapanesePatternPainter(
-        color: color.withOpacity(opacity),
+        color: color.withValues(alpha: opacity),
       ),
       child: Container(),
     );

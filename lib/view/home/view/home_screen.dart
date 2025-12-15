@@ -97,8 +97,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       },
                     ),
                   ),
-
-                  // Barre de panier en bas
                   _buildCartBar(localizations),
                 ],
               ),
@@ -122,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             gradient: AppColor.primaryGradient,
             boxShadow: [
               BoxShadow(
-                color: AppColor.primaryColor.withOpacity(0.3),
+                color: AppColor.primaryColor.withValues(alpha: 0.3),
                 blurRadius: 15,
                 offset: const Offset(0, 5),
               ),
@@ -134,11 +132,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 padding: const EdgeInsets.all(20),
                 child: Row(
                   children: [
-                    // Logo circulaire
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColor.gold, width: 2),
                       ),
@@ -151,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
                     const SizedBox(width: 16),
 
-                    // Titre
+                    // Title
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,21 +165,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             '私たちの製品',
                             style: GoogleFonts.notoSansJp(
                               fontSize: 12,
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                               letterSpacing: 2,
                             ),
                           ),
                         ],
                       ),
                     ),
-
-                    // Bouton de recherche
                     GestureDetector(
                       onTap: () => _showSearchDialog(context),
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
+                          color: Colors.white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Icon(
@@ -195,26 +190,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-
-              // Barre de catégories dynamique
               Consumer<HomeViewModel>(
                 builder: (context, viewModel, _) {
                   return Container(
                     height: 50,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                     ),
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                        // Bouton "Tout"
                         _buildCategoryChip(
                           label: 'Tout',
                           isSelected: viewModel.selectedCategory == null,
                           onTap: () => viewModel.selectCategory(null),
                         ),
-                        // Catégories dynamiques
                         ...viewModel.categories.map((category) {
                           return Padding(
                             padding: const EdgeInsets.only(left: 12),
@@ -224,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               onTap: () => viewModel.selectCategory(category),
                             ),
                           );
-                        }).toList(),
+                        }),
                       ],
                     ),
                   );
@@ -249,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         decoration: BoxDecoration(
           color: isSelected 
               ? Colors.white 
-              : Colors.white.withOpacity(0.2),
+              : Colors.white.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(20),
           border: isSelected 
               ? Border.all(color: AppColor.gold, width: 2)
@@ -313,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColor.error.withOpacity(0.1),
+                color: AppColor.error.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -372,7 +363,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           Container(
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
-              color: AppColor.lightGold.withOpacity(0.3),
+              color: AppColor.lightGold.withValues(alpha: 0.3),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -425,7 +416,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, -5),
               ),
@@ -433,7 +424,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           child: Row(
             children: [
-              // Icône panier avec badge
+              // Cart icon with badge
               Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -474,14 +465,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
               const SizedBox(width: 16),
 
-              // Info panier
+              // Cart info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Votre commande',
+                      'Your order',
                       style: GoogleFonts.notoSans(
                         fontSize: 14,
                         color: AppColor.cardColor,
@@ -499,7 +490,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ),
 
-              // Bouton commander
+              // Order button
               Container(
                 decoration: BoxDecoration(
                   gradient: AppColor.primaryGradient,
@@ -512,7 +503,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     onTap: cartViewModel.isEmpty
                         ? null
                         : () {
-                            // TODO: Aller au panier
+                            // Go to cart
                             Navigator.pushNamed(context, '/cart');
                           },
                     borderRadius: BorderRadius.circular(12),
@@ -526,7 +517,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         child: Row(
                           children: [
                             Text(
-                              'COMMANDER',
+                              'ORDER',
                               style: GoogleFonts.notoSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -687,10 +678,10 @@ class _ProductCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColor.gold.withOpacity(0.2), width: 2),
+              border: Border.all(color: AppColor.gold.withValues(alpha: 0.2), width: 2),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 15,
                   offset: const Offset(0, 5),
                 ),
@@ -699,7 +690,7 @@ class _ProductCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Image du produit
+                // Product image
                 Expanded(
                   flex: 3,
                   child: Container(
@@ -708,8 +699,8 @@ class _ProductCard extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          AppColor.lightGold.withOpacity(0.3),
-                          AppColor.cream.withOpacity(0.5),
+                          AppColor.lightGold.withValues(alpha: 0.3),
+                          AppColor.cream.withValues(alpha: 0.5),
                         ],
                       ),
                       borderRadius: const BorderRadius.only(
@@ -719,16 +710,16 @@ class _ProductCard extends StatelessWidget {
                     ),
                     child: Stack(
                       children: [
-                        // Pattern décoratif
+                        // Decorative pattern
                         const Positioned.fill(
                           child: JapanesePattern(opacity: 0.05),
                         ),
-                        // Icône produit
+                        // Product icon
                         Center(
                           child: Container(
                             padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.5),
+                              color: Colors.white.withValues(alpha: 0.5),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -767,7 +758,7 @@ class _ProductCard extends StatelessWidget {
                   ),
                 ),
 
-                // Informations du produit
+                // Product information
                 Expanded(
                   flex: 2,
                   child: Padding(
@@ -776,7 +767,7 @@ class _ProductCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Nom du produit
+                        // Product name
                         Text(
                           product.name,
                           style: GoogleFonts.notoSans(
@@ -788,18 +779,18 @@ class _ProductCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
 
-                        // Prix et bouton d'ajout
+                        // Price and add button
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // Prix
+                            // Price
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColor.lightGold.withOpacity(0.5),
+                                color: AppColor.lightGold.withValues(alpha: 0.5),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -812,7 +803,7 @@ class _ProductCard extends StatelessWidget {
                               ),
                             ),
 
-                            // Bouton +
+                            // + Button
                             Container(
                               width: 40,
                               height: 40,
@@ -821,7 +812,7 @@ class _ProductCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColor.primaryColor.withOpacity(0.3),
+                                    color: AppColor.primaryColor.withValues(alpha: 0.3),
                                     blurRadius: 8,
                                     offset: const Offset(0, 4),
                                   ),
@@ -868,7 +859,7 @@ class _ProductDetailsSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Image et header
+          // Image and header
           Container(
             height: 250,
             decoration: BoxDecoration(
@@ -876,8 +867,8 @@ class _ProductDetailsSheet extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  AppColor.lightGold.withOpacity(0.3),
-                  AppColor.cream.withOpacity(0.5),
+                  AppColor.lightGold.withValues(alpha: 0.3),
+                  AppColor.cream.withValues(alpha: 0.5),
                 ],
               ),
               borderRadius: const BorderRadius.only(
@@ -894,7 +885,7 @@ class _ProductDetailsSheet extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(40),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.white.withValues(alpha: 0.7),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -924,13 +915,13 @@ class _ProductDetailsSheet extends StatelessWidget {
             ),
           ),
 
-          // Détails
+          // Details
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Nom
+                // Name
                 Text(
                   product.name,
                   style: GoogleFonts.notoSerif(
@@ -953,7 +944,7 @@ class _ProductDetailsSheet extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                // Description si disponible
+                // Description if available
                 if (product.description != null && product.description!.isNotEmpty) ...[
                   Text(
                     product.description!,
@@ -966,17 +957,17 @@ class _ProductDetailsSheet extends StatelessWidget {
                   const SizedBox(height: 16),
                 ],
 
-                // Badges (végétarien, vegan, allergènes)
+                // Badges (vegetarian, vegan, allergens)
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
                     if (product.vegetarien)
-                      _buildBadge('🥗 Végétarien', AppColor.success),
+                      _buildBadge('🥗 Vegetarian', AppColor.success),
                     if (product.vegan)
                       _buildBadge('🌱 Vegan', Colors.green.shade700),
                     if (!product.isInStock)
-                      _buildBadge('❌ Rupture de stock', AppColor.error),
+                      _buildBadge('❌ Out of stock', AppColor.error),
                   ],
                 ),
 
@@ -996,7 +987,7 @@ class _ProductDetailsSheet extends StatelessWidget {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'Allergènes: ${product.allergens}',
+                            'Allergens: ${product.allergens}',
                             style: GoogleFonts.notoSans(
                               fontSize: 12,
                               color: Colors.orange.shade900,
@@ -1012,15 +1003,15 @@ class _ProductDetailsSheet extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColor.lightGold.withOpacity(0.3),
+                    color: AppColor.lightGold.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColor.gold.withOpacity(0.3)),
+                    border: Border.all(color: AppColor.gold.withValues(alpha: 0.3)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Prix',
+                        'Price',
                         style: GoogleFonts.notoSans(
                           fontSize: 18,
                           color: AppColor.black,
@@ -1040,10 +1031,10 @@ class _ProductDetailsSheet extends StatelessWidget {
 
                 const SizedBox(height: 24),
 
-                // Boutons d'action
+                // Action buttons
                 Row(
                   children: [
-                    // Quantité
+                    // Quantity
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: AppColor.gold, width: 2),
@@ -1078,7 +1069,7 @@ class _ProductDetailsSheet extends StatelessWidget {
 
                     const SizedBox(width: 16),
 
-                    // Bouton ajouter au panier
+                    // Add to cart button
                     Expanded(
                       child: Container(
                         height: 60,
@@ -1092,14 +1083,14 @@ class _ProductDetailsSheet extends StatelessWidget {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () {
-                              // Ajouter au panier
+                              // Add to cart
                               context.read<CartViewModel>().addProduct(product);
                               
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    '${product.name} ajouté au panier',
+                                    '${product.name} added to cart',
                                     style: GoogleFonts.notoSans(
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -1154,9 +1145,9 @@ class _ProductDetailsSheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.5), width: 1.5),
+        border: Border.all(color: color.withValues(alpha: 0.5), width: 1.5),
       ),
       child: Text(
         label,

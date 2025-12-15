@@ -39,7 +39,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Icône de scan
+            // Scan icon
             Container(
               padding: const EdgeInsets.all(40),
               decoration: BoxDecoration(
@@ -47,7 +47,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: AppColor.primaryColor.withOpacity(0.2),
+                    color: AppColor.primaryColor.withValues(alpha: 0.2),
                     blurRadius: 20,
                     spreadRadius: 5,
                   ),

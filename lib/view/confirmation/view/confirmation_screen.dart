@@ -23,7 +23,6 @@ class ConfirmationScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Icône de succès
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
@@ -31,7 +30,7 @@ class ConfirmationScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.green.withOpacity(0.3),
+                        color: Colors.green.withValues(alpha: 0.3),
                         blurRadius: 20,
                         spreadRadius: 5,
                       ),
@@ -67,8 +66,6 @@ class ConfirmationScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-
-                // Carte avec les détails
                 Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
@@ -122,8 +119,6 @@ class ConfirmationScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-
-                // Informations supplémentaires
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -150,8 +145,6 @@ class ConfirmationScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 48),
-
-                // Bouton retour à l'accueil
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
