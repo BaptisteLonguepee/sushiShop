@@ -166,7 +166,7 @@ class CartScreen extends StatelessWidget {
                   if (item.notes != null && item.notes!.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(
-                      localizations.cart_note(note: item.notes!),
+                      localizations.cart_note(item.notes!),
                       style: GoogleFonts.kaiseiOpti(
                         fontSize: 12,
                         fontStyle: FontStyle.italic,
@@ -261,7 +261,7 @@ class CartScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  localizations.cart_articles(count: cart.itemCount),
+                  localizations.cart_articles(cart.itemCount),
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 16,
                     color: Colors.grey[600],
@@ -338,7 +338,7 @@ class CartScreen extends StatelessWidget {
           style: GoogleFonts.kaiseiOpti(fontWeight: FontWeight.bold),
         ),
         content: Text(
-          localizations.cart_delete_message(productName: item.product.nom),
+          localizations.cart_delete_message(item.product.nom),
           style: GoogleFonts.kaiseiOpti(),
         ),
         actions: [

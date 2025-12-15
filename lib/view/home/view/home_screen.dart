@@ -613,7 +613,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     return const SizedBox.shrink();
                   }
                   return Text(
-                    localizations.home_products_found(count: vm.products.length),
+                    localizations.home_products_found(vm.products.length),
                     style: GoogleFonts.notoSans(
                       fontSize: 14,
                       color: AppColor.cardColor,
@@ -1094,7 +1094,7 @@ class _ProductDetailsSheet extends StatelessWidget {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    localizations.home_added_to_cart(productName: product.name),
+                                    localizations.home_added_to_cart(product.name),
                                     style: GoogleFonts.notoSans(
                                       fontWeight: FontWeight.w600,
                                     ),

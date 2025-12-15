@@ -102,7 +102,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  localizations.payment_table_number(tableNumber: widget.tableNumber),
+                  localizations.payment_table_number(widget.tableNumber),
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -349,7 +349,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               )
             : Text(
                 _selectedPaymentMethod == 'card'
-                    ? localizations.payment_process_card(amount: widget.totalAmount.toStringAsFixed(2))
+                    ? localizations.payment_process_card(widget.totalAmount.toStringAsFixed(2))
                     : localizations.payment_validate_order,
                 style: GoogleFonts.kaiseiOpti(
                   fontSize: 20,
@@ -426,7 +426,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            localizations.payment_error(error: e.toString()),
+            localizations.payment_error(e.toString()),
             style: GoogleFonts.kaiseiOpti(),
           ),
           backgroundColor: Colors.red,

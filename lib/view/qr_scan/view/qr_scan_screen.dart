@@ -99,7 +99,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                     const Icon(Icons.check_circle, color: Colors.green, size: 30),
                     const SizedBox(width: 12),
                     Text(
-                      localizations.qr_scan_table(tableNumber: _scannedTableNumber!),
+                      localizations.qr_scan_table(_scannedTableNumber!),
                       style: GoogleFonts.kaiseiOpti(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

@@ -61,7 +61,7 @@ class ConfirmationScreen extends StatelessWidget {
 
                 // Message
                 Text(
-                  localizations.confirmation_thank_you(clientName: commande.nomClient),
+                  localizations.confirmation_thank_you(commande.nomClient),
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 18,
                     color: Colors.grey[700],
