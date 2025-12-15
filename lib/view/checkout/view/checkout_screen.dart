@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constant/color.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../cart/viewmodel/cart_viewmodel.dart';
 import '../../qr_scan/view/qr_scan_screen.dart';
 
@@ -17,12 +18,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final cart = context.watch<CartViewModel>();
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
       appBar: AppBar(
         title: Text(
-          'Vérifier la commande',
+          localizations.checkout_title,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -36,11 +38,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle('Résumé de la commande'),
+            _buildSectionTitle(localizations.checkout_order_summary),
             const SizedBox(height: 16),
-            _buildOrderSummary(cart),
+            _buildOrderSummary(cart, localizations),
             const SizedBox(height: 32),
-            _buildSubmitButton(cart),
+            _buildSubmitButton(cart, localizations),
           ],
         ),
       ),
@@ -58,7 +60,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget _buildOrderSummary(CartViewModel cart) {
+  Widget _buildOrderSummary(CartViewModel cart, AppLocalizations localizations) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -70,7 +72,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Résumé de la commande',
+              localizations.checkout_order_summary,
               style: GoogleFonts.kaiseiOpti(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -103,7 +105,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total',
+                  localizations.cart_total,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -125,7 +127,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget _buildSubmitButton(CartViewModel cart) {
+  Widget _buildSubmitButton(CartViewModel cart, AppLocalizations localizations) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -138,7 +140,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
         ),
         child: Text(
-          'Scanner le QR Code de la table',
+          localizations.checkout_scan_qr,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 20,
             fontWeight: FontWeight.bold,

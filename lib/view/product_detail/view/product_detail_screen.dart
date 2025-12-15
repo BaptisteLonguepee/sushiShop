@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constant/color.dart';
 import '../../../core/providers/cart_provider.dart';
 import '../../../data/model/product_model.dart';
+import '../../../l10n/app_localizations.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -23,40 +24,49 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final List<String> _selectedExtras = [];
   final TextEditingController _notesController = TextEditingController();
 
-  // Options de taille
-  final Map<String, double> _sizes = {
-    'Petit': 0.0,
-    'Moyen': 2.0,
-    'Grand': 4.0,
-  };
-
-  // Extras disponibles
-  final Map<String, double> _extras = {
-    'Sauce soja supplémentaire': 0.50,
-    'Gingembre mariné': 0.50,
-    'Wasabi extra': 0.50,
-    'Sauce piquante': 0.50,
-    'Sésame': 0.30,
-  };
-
   @override
   void dispose() {
     _notesController.dispose();
     super.dispose();
   }
 
-  double get _totalPrice {
+  // Get sizes map based on localization
+  Map<String, double> _getSizes(AppLocalizations localizations) {
+    return {
+      localizations.product_size_small: 0.0,
+      localizations.product_size_medium: 2.0,
+      localizations.product_size_large: 4.0,
+    };
+  }
+
+  // Get extras map based on localization
+  Map<String, double> _getExtras(AppLocalizations localizations) {
+    return {
+      localizations.product_extra_soy_sauce: 0.50,
+      localizations.product_extra_ginger: 0.50,
+      localizations.product_extra_wasabi: 0.50,
+      localizations.product_extra_spicy_sauce: 0.50,
+      localizations.product_extra_sesame: 0.30,
+    };
+  }
+
+  double _getTotalPrice(AppLocalizations localizations) {
+    final sizes = _getSizes(localizations);
+    final extras = _getExtras(localizations);
+    
     double basePrice = widget.product.prix;
-    double sizeExtra = _selectedSize != null ? _sizes[_selectedSize]! : 0.0;
+    double sizeExtra = _selectedSize != null ? (sizes[_selectedSize] ?? 0.0) : 0.0;
     double extrasTotal = _selectedExtras.fold(
       0.0,
-      (sum, extra) => sum + _extras[extra]!,
+      (sum, extra) => sum + (extras[extra] ?? 0.0),
     );
     return (basePrice + sizeExtra + extrasTotal) * _quantity;
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
       appBar: AppBar(
@@ -91,34 +101,34 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                         // Description
                         if (widget.product.description != null) ...[
-                          _buildDescription(),
+                          _buildDescription(localizations),
                           const SizedBox(height: 16),
                         ],
 
                         // Allergènes
                         if (widget.product.allergens != null) ...[
-                          _buildAllergens(),
+                          _buildAllergens(localizations),
                           const SizedBox(height: 16),
                         ],
 
                         // Tags (végétarien, vegan)
-                        _buildTags(),
+                        _buildTags(localizations),
                         const SizedBox(height: 24),
 
                         // Sélection de taille
-                        _buildSizeSelector(),
+                        _buildSizeSelector(localizations),
                         const SizedBox(height: 24),
 
                         // Extras
-                        _buildExtrasSelector(),
+                        _buildExtrasSelector(localizations),
                         const SizedBox(height: 24),
 
                         // Notes personnalisées
-                        _buildNotesField(),
+                        _buildNotesField(localizations),
                         const SizedBox(height: 24),
 
                         // Quantité
-                        _buildQuantitySelector(),
+                        _buildQuantitySelector(localizations),
                         const SizedBox(height: 100), // Espace pour le bouton fixe
                       ],
                     ),
@@ -127,7 +137,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
           ),
-          _buildAddToCartButton(context),
+          _buildAddToCartButton(context, localizations),
         ],
       ),
     );
@@ -189,12 +199,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildDescription() {
+  Widget _buildDescription(AppLocalizations localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Description',
+          localizations.product_description,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -214,7 +224,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildAllergens() {
+  Widget _buildAllergens(AppLocalizations localizations) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -231,7 +241,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Allergènes',
+                  localizations.product_allergens,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -253,13 +263,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildTags() {
+  Widget _buildTags(AppLocalizations localizations) {
     return Row(
       children: [
         if (widget.product.vegetarien)
-          _buildTag('Végétarien', Colors.green),
+          _buildTag(localizations.product_vegetarian, Colors.green),
         if (widget.product.vegan)
-          _buildTag('Vegan', Colors.lightGreen),
+          _buildTag(localizations.product_vegan, Colors.lightGreen),
       ],
     );
   }
@@ -284,12 +294,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildSizeSelector() {
+  Widget _buildSizeSelector(AppLocalizations localizations) {
+    final sizes = _getSizes(localizations);
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Taille',
+          localizations.product_size,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -299,7 +311,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         const SizedBox(height: 12),
         Wrap(
           spacing: 12,
-          children: _sizes.entries.map((entry) {
+          children: sizes.entries.map((entry) {
             final isSelected = _selectedSize == entry.key;
             return ChoiceChip(
               label: Text(
@@ -324,12 +336,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildExtrasSelector() {
+  Widget _buildExtrasSelector(AppLocalizations localizations) {
+    final extras = _getExtras(localizations);
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Extras',
+          localizations.product_extras,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -337,7 +351,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        ..._extras.entries.map((entry) {
+        ...extras.entries.map((entry) {
           final isSelected = _selectedExtras.contains(entry.key);
           return CheckboxListTile(
             title: Text(
@@ -369,12 +383,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildNotesField() {
+  Widget _buildNotesField(AppLocalizations localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Notes spéciales',
+          localizations.product_special_notes,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -386,7 +400,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           controller: _notesController,
           maxLines: 3,
           decoration: InputDecoration(
-            hintText: 'Ex: Sans oignons, bien cuit...',
+            hintText: localizations.product_notes_hint,
             hintStyle: GoogleFonts.kaiseiOpti(color: Colors.grey),
             filled: true,
             fillColor: Colors.white,
@@ -409,12 +423,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildQuantitySelector() {
+  Widget _buildQuantitySelector(AppLocalizations localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Quantité',
+          localizations.product_quantity,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -461,7 +475,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildAddToCartButton(BuildContext context) {
+  Widget _buildAddToCartButton(BuildContext context, AppLocalizations localizations) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -483,14 +497,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total',
+                  localizations.cart_total,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  '${_totalPrice.toStringAsFixed(2)} €',
+                  '${_getTotalPrice(localizations).toStringAsFixed(2)} €',
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -503,7 +517,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => _addToCart(context),
+                onPressed: () => _addToCart(context, localizations),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -512,7 +526,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
                 child: Text(
-                  'Ajouter au panier',
+                  localizations.addToCart,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -526,19 +540,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  void _addToCart(BuildContext context) {
+  void _addToCart(BuildContext context, AppLocalizations localizations) {
     final cart = context.read<CartProvider>();
     
     // Construire les notes avec les options sélectionnées
     String notes = '';
     if (_selectedSize != null) {
-      notes += 'Taille: $_selectedSize\n';
+      notes += '${localizations.product_size}: $_selectedSize\n';
     }
     if (_selectedExtras.isNotEmpty) {
-      notes += 'Extras: ${_selectedExtras.join(', ')}\n';
+      notes += '${localizations.product_extras}: ${_selectedExtras.join(', ')}\n';
     }
     if (_notesController.text.isNotEmpty) {
-      notes += 'Notes: ${_notesController.text}';
+      notes += '${localizations.product_special_notes}: ${_notesController.text}';
     }
 
     cart.addItem(
@@ -550,7 +564,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          '${widget.product.nom} ajouté au panier',
+          localizations.product_added_to_cart(productName: widget.product.nom),
           style: GoogleFonts.kaiseiOpti(),
         ),
         backgroundColor: Colors.green,

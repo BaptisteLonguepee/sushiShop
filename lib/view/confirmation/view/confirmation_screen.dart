@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constant/color.dart';
 import '../../../data/model/commande_model.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../welcome/view/welcome_screen.dart';
 
 class ConfirmationScreen extends StatelessWidget {
@@ -14,6 +15,8 @@ class ConfirmationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
       body: SafeArea(
@@ -46,7 +49,7 @@ class ConfirmationScreen extends StatelessWidget {
 
                 // Titre
                 Text(
-                  'Commande confirmée !',
+                  localizations.confirmation_title,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -58,7 +61,7 @@ class ConfirmationScreen extends StatelessWidget {
 
                 // Message
                 Text(
-                  'Merci ${commande.nomClient} pour votre commande',
+                  localizations.confirmation_thank_you(clientName: commande.nomClient),
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 18,
                     color: Colors.grey[700],
@@ -76,13 +79,13 @@ class ConfirmationScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         _buildDetailRow(
-                          'Numéro de commande',
+                          localizations.confirmation_order_number,
                           commande.numeroCommande,
                           bold: true,
                         ),
                         const Divider(height: 24),
                         _buildDetailRow(
-                          'Montant total',
+                          localizations.confirmation_total_amount,
                           '${commande.total.toStringAsFixed(2)} €',
                           valueColor: AppColor.primaryColor,
                         ),
@@ -103,7 +106,7 @@ class ConfirmationScreen extends StatelessWidget {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Text(
-                                  'Temps de préparation estimé: 15-20 min',
+                                  localizations.confirmation_estimated_time,
                                   style: GoogleFonts.kaiseiOpti(
                                     fontSize: 14,
                                     color: Colors.orange[900],
@@ -134,7 +137,7 @@ class ConfirmationScreen extends StatelessWidget {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Vous recevrez une notification lorsque votre commande sera prête',
+                          localizations.confirmation_notification_info,
                           style: GoogleFonts.kaiseiOpti(
                             fontSize: 14,
                             color: Colors.blue[900],
@@ -163,7 +166,7 @@ class ConfirmationScreen extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'Retour à l\'accueil',
+                      localizations.confirmation_back_home,
                       style: GoogleFonts.kaiseiOpti(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

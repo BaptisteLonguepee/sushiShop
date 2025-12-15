@@ -13,5 +13,148 @@
   "order_type_takeaway": "À Emporter",
   "order_type_table_number": "Numéro de chevalet",
   "order_type_enter_table_number": "Entrez le numéro",
-  "order_type_continue": "Continuer"
+  "order_type_continue": "Continuer",
+
+  "cart_title": "Mon Panier",
+  "cart_empty": "Votre panier est vide",
+  "cart_empty_subtitle": "Ajoutez des produits pour commencer",
+  "cart_browse_menu": "Parcourir le menu",
+  "cart_note": "Note: {note}",
+  "@cart_note": {
+    "placeholders": {
+      "note": {"type": "String"}
+    }
+  },
+  "cart_articles": "Articles ({count})",
+  "@cart_articles": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "cart_total": "Total",
+  "cart_order": "Commander",
+  "cart_delete_title": "Supprimer l'article",
+  "cart_delete_message": "Voulez-vous retirer \"{productName}\" du panier ?",
+  "@cart_delete_message": {
+    "placeholders": {
+      "productName": {"type": "String"}
+    }
+  },
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+
+  "confirmation_title": "Commande confirmée !",
+  "confirmation_thank_you": "Merci {clientName} pour votre commande",
+  "@confirmation_thank_you": {
+    "placeholders": {
+      "clientName": {"type": "String"}
+    }
+  },
+  "confirmation_order_number": "Numéro de commande",
+  "confirmation_total_amount": "Montant total",
+  "confirmation_estimated_time": "Temps de préparation estimé: 15-20 min",
+  "confirmation_notification_info": "Vous recevrez une notification lorsque votre commande sera prête",
+  "confirmation_back_home": "Retour à l'accueil",
+
+  "checkout_title": "Vérifier la commande",
+  "checkout_order_summary": "Résumé de la commande",
+  "checkout_scan_qr": "Scanner le QR Code de la table",
+
+  "payment_title": "Paiement",
+  "payment_table_number": "Table n°{tableNumber}",
+  "@payment_table_number": {
+    "placeholders": {
+      "tableNumber": {"type": "String"}
+    }
+  },
+  "payment_validated": "Validé",
+  "payment_total_to_pay": "Total à payer",
+  "payment_method": "Méthode de paiement",
+  "payment_card": "Paiement sur la borne (Carte)",
+  "payment_counter": "Paiement au comptoir",
+  "payment_terminal_title": "Terminal de paiement",
+  "payment_terminal_instruction": "Veuillez insérer ou présenter votre carte bancaire au terminal de paiement",
+  "payment_contactless": "Sans contact accepté",
+  "payment_counter_info": "Veuillez vous présenter au comptoir avec votre numéro de commande pour effectuer le paiement.",
+  "payment_processing": "Paiement en cours...",
+  "payment_validating": "Validation...",
+  "payment_process_card": "Payer {amount} €",
+  "@payment_process_card": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "payment_validate_order": "Valider la commande",
+  "payment_error": "Erreur lors de la création de la commande: {error}",
+  "@payment_error": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+
+  "qr_scan_title": "Scanner le QR Code",
+  "qr_scan_instruction": "Veuillez scanner le QR code de votre table",
+  "qr_scan_required": "Le numéro de table est nécessaire pour valider votre commande",
+  "qr_scan_table": "Table n°{tableNumber}",
+  "@qr_scan_table": {
+    "placeholders": {
+      "tableNumber": {"type": "String"}
+    }
+  },
+  "qr_scan_scanning": "Scan en cours...",
+  "qr_scan_button": "Scanner le QR Code",
+  "qr_scan_continue_payment": "Continuer vers le paiement",
+  "qr_scan_manual_input": "Saisir le numéro manuellement",
+  "qr_scan_manual_dialog_title": "Numéro de table",
+  "qr_scan_manual_dialog_hint": "Entrez le numéro de table",
+  "validate": "Valider",
+
+  "product_description": "Description",
+  "product_allergens": "Allergènes",
+  "product_vegetarian": "Végétarien",
+  "product_vegan": "Vegan",
+  "product_size": "Taille",
+  "product_size_small": "Petit",
+  "product_size_medium": "Moyen",
+  "product_size_large": "Grand",
+  "product_extras": "Extras",
+  "product_extra_soy_sauce": "Sauce soja supplémentaire",
+  "product_extra_ginger": "Gingembre mariné",
+  "product_extra_wasabi": "Wasabi extra",
+  "product_extra_spicy_sauce": "Sauce piquante",
+  "product_extra_sesame": "Sésame",
+  "product_special_notes": "Notes spéciales",
+  "product_notes_hint": "Ex: Sans oignons, bien cuit...",
+  "product_quantity": "Quantité",
+  "product_added_to_cart": "{productName} ajouté au panier",
+  "@product_added_to_cart": {
+    "placeholders": {
+      "productName": {"type": "String"}
+    }
+  },
+
+  "home_loading": "Chargement des produits...",
+  "home_all": "Tout",
+  "home_search": "Rechercher",
+  "home_search_hint": "Nom du produit...",
+  "home_products_found": "{count} produit(s) trouvé(s)",
+  "@home_products_found": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "home_your_order": "Votre commande",
+  "home_order_button": "COMMANDER",
+  "home_new": "NOUVEAU",
+  "home_price": "Prix",
+  "home_vegetarian": "Végétarien",
+  "home_vegan": "Végan",
+  "home_out_of_stock": "Rupture de stock",
+  "home_allergens": "Allergènes :",
+  "home_added_to_cart": "{productName} ajouté au panier",
+  "@home_added_to_cart": {
+    "placeholders": {
+      "productName": {"type": "String"}
+    }
+  }
 }

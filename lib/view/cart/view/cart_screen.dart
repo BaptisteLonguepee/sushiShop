@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constant/color.dart';
+import '../../../l10n/app_localizations.dart';
 import '../viewmodel/cart_viewmodel.dart';
 import '../../../data/model/cart_item_model.dart';
 import '../../checkout/view/checkout_screen.dart';
@@ -11,11 +12,13 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
       appBar: AppBar(
         title: Text(
-          'Mon Panier',
+          localizations.cart_title,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -27,7 +30,7 @@ class CartScreen extends StatelessWidget {
       body: Consumer<CartViewModel>(
         builder: (context, cart, child) {
           if (cart.isEmpty) {
-            return _buildEmptyCart(context);
+            return _buildEmptyCart(context, localizations);
           }
 
           return Column(
@@ -38,11 +41,11 @@ class CartScreen extends StatelessWidget {
                   itemCount: cart.items.length,
                   itemBuilder: (context, index) {
                     final item = cart.items[index];
-                    return _buildCartItem(context, cart, item);
+                    return _buildCartItem(context, cart, item, localizations);
                   },
                 ),
               ),
-              _buildBottomBar(context, cart),
+              _buildBottomBar(context, cart, localizations),
             ],
           );
         },
@@ -50,7 +53,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyCart(BuildContext context) {
+  Widget _buildEmptyCart(BuildContext context, AppLocalizations localizations) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -62,7 +65,7 @@ class CartScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           Text(
-            'Votre panier est vide',
+            localizations.cart_empty,
             style: GoogleFonts.kaiseiOpti(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -71,7 +74,7 @@ class CartScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Ajoutez des produits pour commencer',
+            localizations.cart_empty_subtitle,
             style: GoogleFonts.kaiseiOpti(
               fontSize: 16,
               color: Colors.grey[500],
@@ -85,7 +88,7 @@ class CartScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             ),
             child: Text(
-              'Parcourir le menu',
+              localizations.cart_browse_menu,
               style: GoogleFonts.kaiseiOpti(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -97,7 +100,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCartItem(BuildContext context, CartViewModel cart, CartItem item) {
+  Widget _buildCartItem(BuildContext context, CartViewModel cart, CartItem item, AppLocalizations localizations) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
@@ -163,7 +166,7 @@ class CartScreen extends StatelessWidget {
                   if (item.notes != null && item.notes!.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(
-                      'Note: ${item.notes}',
+                      localizations.cart_note(note: item.notes!),
                       style: GoogleFonts.kaiseiOpti(
                         fontSize: 12,
                         fontStyle: FontStyle.italic,
@@ -211,7 +214,7 @@ class CartScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 IconButton(
                   icon: const Icon(Icons.delete_outline, color: Colors.red),
-                  onPressed: () => _showDeleteConfirmation(context, cart, item),
+                  onPressed: () => _showDeleteConfirmation(context, cart, item, localizations),
                 ),
               ],
             ),
@@ -236,7 +239,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomBar(BuildContext context, CartViewModel cart) {
+  Widget _buildBottomBar(BuildContext context, CartViewModel cart, AppLocalizations localizations) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -258,7 +261,7 @@ class CartScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Articles (${cart.itemCount})',
+                  localizations.cart_articles(count: cart.itemCount),
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 16,
                     color: Colors.grey[600],
@@ -278,7 +281,7 @@ class CartScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total',
+                  localizations.cart_total,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -312,7 +315,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Commander',
+                  localizations.cart_order,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -326,22 +329,22 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmation(BuildContext context, CartViewModel cart, CartItem item) {
+  void _showDeleteConfirmation(BuildContext context, CartViewModel cart, CartItem item, AppLocalizations localizations) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Supprimer l\'article',
+          localizations.cart_delete_title,
           style: GoogleFonts.kaiseiOpti(fontWeight: FontWeight.bold),
         ),
         content: Text(
-          'Voulez-vous retirer "${item.product.nom}" du panier ?',
+          localizations.cart_delete_message(productName: item.product.nom),
           style: GoogleFonts.kaiseiOpti(),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Annuler', style: GoogleFonts.kaiseiOpti()),
+            child: Text(localizations.cancel, style: GoogleFonts.kaiseiOpti()),
           ),
           TextButton(
             onPressed: () {
@@ -349,7 +352,7 @@ class CartScreen extends StatelessWidget {
               Navigator.pop(context);
             },
             child: Text(
-              'Supprimer',
+              localizations.delete,
               style: GoogleFonts.kaiseiOpti(color: Colors.red),
             ),
           ),

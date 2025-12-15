@@ -6,6 +6,7 @@ import '../../../core/providers/cart_provider.dart';
 import '../../../data/model/commande_model.dart';
 import '../../../data/model/commande_article_model.dart';
 import '../../../data/repository/commande_repository.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../confirmation/view/confirmation_screen.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -41,11 +42,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
       appBar: AppBar(
         title: Text(
-          'Paiement',
+          localizations.payment_title,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -60,31 +63,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Récapitulatif
-            _buildSummaryCard(),
+            _buildSummaryCard(localizations),
             const SizedBox(height: 24),
 
             // Méthode de paiement
-            _buildPaymentMethodSelector(),
+            _buildPaymentMethodSelector(localizations),
             const SizedBox(height: 24),
 
             // Formulaire de paiement mocké
             if (_selectedPaymentMethod == 'card') ...[
-              _buildCardPaymentForm(),
+              _buildCardPaymentForm(localizations),
             ] else if (_selectedPaymentMethod == 'cash') ...[
-              _buildCashPaymentInfo(),
+              _buildCashPaymentInfo(localizations),
             ],
 
             const SizedBox(height: 32),
 
             // Bouton de paiement
-            _buildPaymentButton(),
+            _buildPaymentButton(localizations),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSummaryCard() {
+  Widget _buildSummaryCard(AppLocalizations localizations) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -99,7 +102,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Table n°${widget.tableNumber}',
+                  localizations.payment_table_number(tableNumber: widget.tableNumber),
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -113,7 +116,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     border: Border.all(color: Colors.green),
                   ),
                   child: Text(
-                    'Validé',
+                    localizations.payment_validated,
                     style: GoogleFonts.kaiseiOpti(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -128,7 +131,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total à payer',
+                  localizations.payment_total_to_pay,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -150,12 +153,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Widget _buildPaymentMethodSelector() {
+  Widget _buildPaymentMethodSelector(AppLocalizations localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Méthode de paiement',
+          localizations.payment_method,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -166,13 +169,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
         _buildPaymentMethodOption(
           value: 'card',
           icon: Icons.credit_card,
-          title: 'Paiement sur la borne (Carte)',
+          title: localizations.payment_card,
         ),
         const SizedBox(height: 12),
         _buildPaymentMethodOption(
           value: 'cash',
           icon: Icons.store,
-          title: 'Paiement au comptoir',
+          title: localizations.payment_counter,
         ),
       ],
     );
@@ -221,7 +224,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Widget _buildCardPaymentForm() {
+  Widget _buildCardPaymentForm(AppLocalizations localizations) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -238,7 +241,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
           const SizedBox(height: 20),
           Text(
-            'Terminal de paiement',
+            localizations.payment_terminal_title,
             style: GoogleFonts.kaiseiOpti(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -247,7 +250,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
           const SizedBox(height: 12),
           Text(
-            'Veuillez insérer ou présenter votre carte bancaire au terminal de paiement',
+            localizations.payment_terminal_instruction,
             style: GoogleFonts.kaiseiOpti(
               fontSize: 16,
               color: Colors.blue[800],
@@ -267,7 +270,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 Icon(Icons.contactless, color: Colors.blue[700], size: 24),
                 const SizedBox(width: 12),
                 Text(
-                  'Sans contact accepté',
+                  localizations.payment_contactless,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -282,7 +285,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Widget _buildCashPaymentInfo() {
+  Widget _buildCashPaymentInfo(AppLocalizations localizations) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -295,7 +298,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           const SizedBox(width: 16),
           Expanded(
             child: Text(
-              'Veuillez vous présenter au comptoir avec votre numéro de commande pour effectuer le paiement.',
+              localizations.payment_counter_info,
               style: GoogleFonts.kaiseiOpti(
                 fontSize: 14,
                 color: Colors.blue[900],
@@ -307,11 +310,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Widget _buildPaymentButton() {
+  Widget _buildPaymentButton(AppLocalizations localizations) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: _isProcessing ? null : _processPayment,
+        onPressed: _isProcessing ? null : () => _processPayment(localizations),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColor.primaryColor,
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -335,8 +338,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   const SizedBox(height: 8),
                   Text(
                     _selectedPaymentMethod == 'card' 
-                        ? 'Paiement en cours...' 
-                        : 'Validation...',
+                        ? localizations.payment_processing 
+                        : localizations.payment_validating,
                     style: GoogleFonts.kaiseiOpti(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -346,8 +349,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
               )
             : Text(
                 _selectedPaymentMethod == 'card'
-                    ? 'Process payment ${widget.totalAmount.toStringAsFixed(2)} €'
-                    : 'Validate order',
+                    ? localizations.payment_process_card(amount: widget.totalAmount.toStringAsFixed(2))
+                    : localizations.payment_validate_order,
                 style: GoogleFonts.kaiseiOpti(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -357,7 +360,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Future<void> _processPayment() async {
+  Future<void> _processPayment(AppLocalizations localizations) async {
     setState(() {
       _isProcessing = true;
     });
@@ -423,7 +426,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Error creating order: $e',
+            localizations.payment_error(error: e.toString()),
             style: GoogleFonts.kaiseiOpti(),
           ),
           backgroundColor: Colors.red,

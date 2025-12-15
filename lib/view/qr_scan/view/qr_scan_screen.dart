@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constant/color.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../payment/view/payment_screen.dart';
 
 class QrScanScreen extends StatefulWidget {
@@ -21,11 +22,13 @@ class _QrScanScreenState extends State<QrScanScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
       appBar: AppBar(
         title: Text(
-          'Scanner le QR Code',
+          localizations.qr_scan_title,
           style: GoogleFonts.kaiseiOpti(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -63,7 +66,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
 
             // Instructions
             Text(
-              'Veuillez scanner le QR code de votre table',
+              localizations.qr_scan_instruction,
               style: GoogleFonts.kaiseiOpti(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -72,7 +75,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Le numéro de table est nécessaire pour valider votre commande',
+              localizations.qr_scan_required,
               style: GoogleFonts.kaiseiOpti(
                 fontSize: 16,
                 color: Colors.grey[600],
@@ -96,7 +99,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                     const Icon(Icons.check_circle, color: Colors.green, size: 30),
                     const SizedBox(width: 12),
                     Text(
-                      'Table n°$_scannedTableNumber',
+                      localizations.qr_scan_table(tableNumber: _scannedTableNumber!),
                       style: GoogleFonts.kaiseiOpti(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -127,7 +130,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                       )
                     : const Icon(Icons.qr_code_scanner),
                 label: Text(
-                  _isScanning ? 'Scan en cours...' : 'Scanner le QR Code',
+                  _isScanning ? localizations.qr_scan_scanning : localizations.qr_scan_button,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -158,7 +161,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
                     ),
                   ),
                   child: Text(
-                    'Continuer vers le paiement',
+                    localizations.qr_scan_continue_payment,
                     style: GoogleFonts.kaiseiOpti(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -172,9 +175,9 @@ class _QrScanScreenState extends State<QrScanScreen> {
 
             // Option de saisie manuelle
             TextButton(
-              onPressed: _showManualInputDialog,
+              onPressed: () => _showManualInputDialog(localizations),
               child: Text(
-                'Saisir le numéro manuellement',
+                localizations.qr_scan_manual_input,
                 style: GoogleFonts.kaiseiOpti(
                   fontSize: 16,
                   color: AppColor.primaryColor,
@@ -209,21 +212,21 @@ class _QrScanScreenState extends State<QrScanScreen> {
     // HapticFeedback.mediumImpact(); // Décommenter si nécessaire
   }
 
-  void _showManualInputDialog() {
+  void _showManualInputDialog(AppLocalizations localizations) {
     final controller = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Numéro de table',
+          localizations.qr_scan_manual_dialog_title,
           style: GoogleFonts.kaiseiOpti(fontWeight: FontWeight.bold),
         ),
         content: TextField(
           controller: controller,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            hintText: 'Entrez le numéro de table',
+            hintText: localizations.qr_scan_manual_dialog_hint,
             hintStyle: GoogleFonts.kaiseiOpti(),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -234,7 +237,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Annuler', style: GoogleFonts.kaiseiOpti()),
+            child: Text(localizations.cancel, style: GoogleFonts.kaiseiOpti()),
           ),
           TextButton(
             onPressed: () {
@@ -246,7 +249,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
               }
             },
             child: Text(
-              'Valider',
+              localizations.validate,
               style: GoogleFonts.kaiseiOpti(color: AppColor.primaryColor),
             ),
           ),

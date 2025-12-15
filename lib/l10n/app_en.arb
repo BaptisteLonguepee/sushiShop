@@ -13,5 +13,148 @@
   "order_type_takeaway": "Takeaway",
   "order_type_table_number": "Table Number",
   "order_type_enter_table_number": "Enter the number",
-  "order_type_continue": "Continue"
+  "order_type_continue": "Continue",
+
+  "cart_title": "My Cart",
+  "cart_empty": "Your cart is empty",
+  "cart_empty_subtitle": "Add products to get started",
+  "cart_browse_menu": "Browse menu",
+  "cart_note": "Note: {note}",
+  "@cart_note": {
+    "placeholders": {
+      "note": {"type": "String"}
+    }
+  },
+  "cart_articles": "Items ({count})",
+  "@cart_articles": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "cart_total": "Total",
+  "cart_order": "Order",
+  "cart_delete_title": "Delete item",
+  "cart_delete_message": "Do you want to remove \"{productName}\" from the cart?",
+  "@cart_delete_message": {
+    "placeholders": {
+      "productName": {"type": "String"}
+    }
+  },
+  "cancel": "Cancel",
+  "delete": "Delete",
+
+  "confirmation_title": "Order confirmed!",
+  "confirmation_thank_you": "Thank you {clientName} for your order",
+  "@confirmation_thank_you": {
+    "placeholders": {
+      "clientName": {"type": "String"}
+    }
+  },
+  "confirmation_order_number": "Order number",
+  "confirmation_total_amount": "Total amount",
+  "confirmation_estimated_time": "Estimated preparation time: 15-20 min",
+  "confirmation_notification_info": "You will receive a notification when your order is ready",
+  "confirmation_back_home": "Back to home",
+
+  "checkout_title": "Review order",
+  "checkout_order_summary": "Order summary",
+  "checkout_scan_qr": "Scan the table QR code",
+
+  "payment_title": "Payment",
+  "payment_table_number": "Table n°{tableNumber}",
+  "@payment_table_number": {
+    "placeholders": {
+      "tableNumber": {"type": "String"}
+    }
+  },
+  "payment_validated": "Validated",
+  "payment_total_to_pay": "Total to pay",
+  "payment_method": "Payment method",
+  "payment_card": "Pay at the terminal (Card)",
+  "payment_counter": "Pay at the counter",
+  "payment_terminal_title": "Payment terminal",
+  "payment_terminal_instruction": "Please insert or present your bank card to the payment terminal",
+  "payment_contactless": "Contactless accepted",
+  "payment_counter_info": "Please go to the counter with your order number to make the payment.",
+  "payment_processing": "Payment in progress...",
+  "payment_validating": "Validating...",
+  "payment_process_card": "Process payment {amount} €",
+  "@payment_process_card": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "payment_validate_order": "Validate order",
+  "payment_error": "Error creating order: {error}",
+  "@payment_error": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+
+  "qr_scan_title": "Scan QR Code",
+  "qr_scan_instruction": "Please scan the QR code of your table",
+  "qr_scan_required": "The table number is required to validate your order",
+  "qr_scan_table": "Table n°{tableNumber}",
+  "@qr_scan_table": {
+    "placeholders": {
+      "tableNumber": {"type": "String"}
+    }
+  },
+  "qr_scan_scanning": "Scanning...",
+  "qr_scan_button": "Scan QR Code",
+  "qr_scan_continue_payment": "Continue to payment",
+  "qr_scan_manual_input": "Enter number manually",
+  "qr_scan_manual_dialog_title": "Table number",
+  "qr_scan_manual_dialog_hint": "Enter the table number",
+  "validate": "Validate",
+
+  "product_description": "Description",
+  "product_allergens": "Allergens",
+  "product_vegetarian": "Vegetarian",
+  "product_vegan": "Vegan",
+  "product_size": "Size",
+  "product_size_small": "Small",
+  "product_size_medium": "Medium",
+  "product_size_large": "Large",
+  "product_extras": "Extras",
+  "product_extra_soy_sauce": "Extra soy sauce",
+  "product_extra_ginger": "Marinated ginger",
+  "product_extra_wasabi": "Extra wasabi",
+  "product_extra_spicy_sauce": "Spicy sauce",
+  "product_extra_sesame": "Sesame",
+  "product_special_notes": "Special notes",
+  "product_notes_hint": "Ex: No onions, well done...",
+  "product_quantity": "Quantity",
+  "product_added_to_cart": "{productName} added to cart",
+  "@product_added_to_cart": {
+    "placeholders": {
+      "productName": {"type": "String"}
+    }
+  },
+
+  "home_loading": "Loading products...",
+  "home_all": "All",
+  "home_search": "Search",
+  "home_search_hint": "Product name...",
+  "home_products_found": "{count} product(s) found",
+  "@home_products_found": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "home_your_order": "Your order",
+  "home_order_button": "ORDER",
+  "home_new": "NEW",
+  "home_price": "Price",
+  "home_vegetarian": "Vegetarian",
+  "home_vegan": "Vegan",
+  "home_out_of_stock": "Out of stock",
+  "home_allergens": "Allergens:",
+  "home_added_to_cart": "{productName} added to cart",
+  "@home_added_to_cart": {
+    "placeholders": {
+      "productName": {"type": "String"}
+    }
+  }
 }

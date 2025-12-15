@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     child: Consumer<HomeViewModel>(
                       builder: (context, viewModel, child) {
                         if (viewModel.isLoading) {
-                          return _buildLoadingState();
+                          return _buildLoadingState(localizations);
                         }
 
                         if (viewModel.errorMessage != null) {
@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       scrollDirection: Axis.horizontal,
                       children: [
                         _buildCategoryChip(
-                          label: 'Tout',
+                          label: localizations.home_all,
                           isSelected: viewModel.selectedCategory == null,
                           onTap: () => viewModel.selectCategory(null),
                         ),
@@ -258,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildLoadingState() {
+  Widget _buildLoadingState(AppLocalizations localizations) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -277,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           const SizedBox(height: 24),
           Text(
-            'Chargement des produits...',
+            localizations.home_loading,
             style: GoogleFonts.notoSans(
               fontSize: 16,
               color: AppColor.cardColor,
@@ -402,6 +402,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           product: product,
           onTap: () => _showProductDetails(context, product, localizations),
           index: index,
+          localizations: localizations,
         );
       },
     );
@@ -472,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Your order',
+                      localizations.home_your_order,
                       style: GoogleFonts.notoSans(
                         fontSize: 14,
                         color: AppColor.cardColor,
@@ -517,7 +518,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         child: Row(
                           children: [
                             Text(
-                              'ORDER',
+                              localizations.home_order_button,
                               style: GoogleFonts.notoSans(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -547,6 +548,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void _showSearchDialog(BuildContext context) {
     final viewModel = context.read<HomeViewModel>();
+    final localizations = AppLocalizations.of(context)!;
     
     showDialog(
       context: context,
@@ -568,7 +570,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'Rechercher',
+                    localizations.home_search,
                     style: GoogleFonts.notoSerif(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -586,7 +588,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               TextField(
                 autofocus: true,
                 decoration: InputDecoration(
-                  hintText: 'Nom du produit...',
+                  hintText: localizations.home_search_hint,
                   prefixIcon: const Icon(Icons.restaurant),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -611,7 +613,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     return const SizedBox.shrink();
                   }
                   return Text(
-                    '${vm.products.length} produit(s) trouvé(s)',
+                    localizations.home_products_found(count: vm.products.length),
                     style: GoogleFonts.notoSans(
                       fontSize: 14,
                       color: AppColor.cardColor,
@@ -647,11 +649,13 @@ class _ProductCard extends StatelessWidget {
   final Product product;
   final VoidCallback onTap;
   final int index;
+  final AppLocalizations localizations;
 
   const _ProductCard({
     required this.product,
     required this.onTap,
     required this.index,
+    required this.localizations,
   });
 
   @override
@@ -743,7 +747,7 @@ class _ProductCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              'NEW',
+                              localizations.home_new,
                               style: GoogleFonts.notoSans(
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
@@ -963,11 +967,11 @@ class _ProductDetailsSheet extends StatelessWidget {
                   runSpacing: 8,
                   children: [
                     if (product.vegetarien)
-                      _buildBadge('🥗 Vegetarian', AppColor.success),
+                      _buildBadge('🥗 ${localizations.home_vegetarian}', AppColor.success),
                     if (product.vegan)
-                      _buildBadge('🌱 Vegan', Colors.green.shade700),
+                      _buildBadge('🌱 ${localizations.home_vegan}', Colors.green.shade700),
                     if (!product.isInStock)
-                      _buildBadge('❌ Out of stock', AppColor.error),
+                      _buildBadge('❌ ${localizations.home_out_of_stock}', AppColor.error),
                   ],
                 ),
 
@@ -987,7 +991,7 @@ class _ProductDetailsSheet extends StatelessWidget {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'Allergens: ${product.allergens}',
+                            '${localizations.home_allergens} ${product.allergens}',
                             style: GoogleFonts.notoSans(
                               fontSize: 12,
                               color: Colors.orange.shade900,
@@ -1011,7 +1015,7 @@ class _ProductDetailsSheet extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Price',
+                        localizations.home_price,
                         style: GoogleFonts.notoSans(
                           fontSize: 18,
                           color: AppColor.black,
@@ -1090,7 +1094,7 @@ class _ProductDetailsSheet extends StatelessWidget {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    '${product.name} added to cart',
+                                    localizations.home_added_to_cart(productName: product.name),
                                     style: GoogleFonts.notoSans(
                                       fontWeight: FontWeight.w600,
                                     ),
