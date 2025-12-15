@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sushishop/view/welcome/model/welcome_model.dart';
 import 'package:sushishop/view/welcome/viewmodel/welcome_viewmodel.dart';
 import 'package:sushishop/view/welcome/view/welcome_screen.dart';
-import 'package:sushishop/core/constant/color.dart';
 import 'package:sushishop/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
