@@ -70,7 +70,14 @@ class CartViewModel extends ChangeNotifier {
   int getProductQuantity(int productId) {
     final item = _items.firstWhere(
       (item) => item.product.id == productId,
-      orElse: () => CartItem(product: Product(id: -1, nom: '', prix: 0)),
+      orElse: () => CartItem(
+        product: Product(
+          id: -1,
+          categoryId: 0,
+          nom: '',
+          prix: 0,
+        ),
+      ),
     );
     return item.product.id == -1 ? 0 : item.quantity;
   }

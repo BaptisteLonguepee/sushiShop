@@ -951,9 +951,64 @@ class _ProductDetailsSheet extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 8),
 
-                // Prix
+                // Description si disponible
+                if (product.description != null && product.description!.isNotEmpty) ...[
+                  Text(
+                    product.description!,
+                    style: GoogleFonts.notoSans(
+                      fontSize: 14,
+                      color: AppColor.cardColor,
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+
+                // Badges (végétarien, vegan, allergènes)
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    if (product.vegetarien)
+                      _buildBadge('🥗 Végétarien', AppColor.success),
+                    if (product.vegan)
+                      _buildBadge('🌱 Vegan', Colors.green.shade700),
+                    if (!product.isInStock)
+                      _buildBadge('❌ Rupture de stock', AppColor.error),
+                  ],
+                ),
+
+                if (product.hasAllergens) ...[
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.orange.shade200),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.warning_amber_rounded, 
+                          color: Colors.orange.shade700, size: 20),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Allergènes: ${product.allergens}',
+                            style: GoogleFonts.notoSans(
+                              fontSize: 12,
+                              color: Colors.orange.shade900,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+
+                const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -1091,6 +1146,25 @@ class _ProductDetailsSheet extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBadge(String label, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withOpacity(0.5), width: 1.5),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.notoSans(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
       ),
     );
   }
