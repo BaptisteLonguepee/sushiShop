@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constant/color.dart';
 import '../../../l10n/app_localizations.dart';
@@ -209,7 +210,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
     });
 
     // Feedback haptique (composant système)
-    // HapticFeedback.mediumImpact(); // Décommenter si nécessaire
+    HapticFeedback.mediumImpact();
   }
 
   void _showManualInputDialog(AppLocalizations localizations) {

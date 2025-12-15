@@ -7,7 +7,11 @@ class OrderTypeModel {
   OrderTypeModel({this.selectedOrderType, this.tableNumber});
 
   bool get isValid {
-    return selectedOrderType != null;
+    if (selectedOrderType == null) return false;
+    if (selectedOrderType == OrderType.dineIn && tableNumber == null) {
+      return false;
+    }
+    return true;
   }
 
   void reset() {

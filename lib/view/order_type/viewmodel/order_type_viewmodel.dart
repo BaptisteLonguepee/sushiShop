@@ -25,10 +25,22 @@ class OrderTypeViewModel extends ChangeNotifier {
   }
 
   void validateAndNavigate(BuildContext context) {
-    if (!_model.isValid) {
+    if (_model.selectedOrderType == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Veuillez sélectionner un type de commande'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (_model.selectedOrderType == OrderType.dineIn && 
+        _model.tableNumber == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Veuillez entrer un numéro de chevalet'),
           duration: Duration(seconds: 2),
           backgroundColor: Colors.red,
         ),
