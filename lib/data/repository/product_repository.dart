@@ -16,6 +16,17 @@ class ProductRepository {
     return (response as List).map((e) => Product.fromMap(e)).toList();
   }
 
+  // 🔹 Récupérer uniquement les produits actifs
+  Future<List<Product>> getActiveProducts() async {
+    final response = await supabase
+        .from(table)
+        .select()
+        .eq('actif', true)
+        .order('id', ascending: true);
+
+    return (response as List).map((e) => Product.fromMap(e)).toList();
+  }
+
   // 🔹 Récupérer un produit par ID
   Future<Product?> getProduct(int id) async {
     final response = await supabase
