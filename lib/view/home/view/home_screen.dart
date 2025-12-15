@@ -718,20 +718,47 @@ class _ProductCard extends StatelessWidget {
                         const Positioned.fill(
                           child: JapanesePattern(opacity: 0.05),
                         ),
-                        // Product icon
+                        // Product image or icon
                         Center(
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.5),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.restaurant,
-                              size: 50,
-                              color: AppColor.primaryColor,
-                            ),
-                          ),
+                          child: product.imageUrl != null
+                              ? ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(18),
+                                    topRight: Radius.circular(18),
+                                  ),
+                                  child: Image.network(
+                                    product.imageUrl!,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(20),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withValues(alpha: 0.5),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.restaurant,
+                                          size: 50,
+                                          color: AppColor.primaryColor,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                )
+                              : Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.5),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.restaurant,
+                                    size: 50,
+                                    color: AppColor.primaryColor,
+                                  ),
+                                ),
                         ),
                         // Badge "Nouveau" ou promotion (optionnel)
                         Positioned(
@@ -885,20 +912,50 @@ class _ProductDetailsSheet extends StatelessWidget {
                 const Positioned.fill(
                   child: JapanesePattern(opacity: 0.05),
                 ),
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(40),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.7),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.restaurant,
-                      size: 100,
-                      color: AppColor.primaryColor,
-                    ),
-                  ),
-                ),
+                // Product image or icon
+                product.imageUrl != null
+                    ? Positioned.fill(
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(32),
+                            topRight: Radius.circular(32),
+                          ),
+                          child: Image.network(
+                            product.imageUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Center(
+                                child: Container(
+                                  padding: const EdgeInsets.all(40),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.7),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.restaurant,
+                                    size: 100,
+                                    color: AppColor.primaryColor,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(40),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.7),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.restaurant,
+                            size: 100,
+                            color: AppColor.primaryColor,
+                          ),
+                        ),
+                      ),
                 Positioned(
                   top: 16,
                   right: 16,
