@@ -1091,21 +1091,6 @@ class _ProductDetailsSheet extends StatelessWidget {
                               context.read<CartViewModel>().addProduct(product);
                               
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    localizations.home_added_to_cart(product.name),
-                                    style: GoogleFonts.notoSans(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  backgroundColor: AppColor.success,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              );
                             },
                             borderRadius: BorderRadius.circular(16),
                             child: Center(

@@ -28,6 +28,7 @@ class CartViewModel extends ChangeNotifier {
         quantity: quantity,
       ));
     }
+    notifyListeners();
   }
 
   // Retirer un produit du panier

@@ -561,17 +561,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       notes: notes.trim().isEmpty ? null : notes.trim(),
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          localizations.product_added_to_cart(productName: widget.product.nom),
-          style: GoogleFonts.kaiseiOpti(),
-        ),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 2),
-      ),
-    );
-
     Navigator.pop(context);
   }
 }
