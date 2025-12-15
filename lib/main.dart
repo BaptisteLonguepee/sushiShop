@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:sushishop/core/constant/color.dart';
 import 'package:sushishop/view/welcome/view/welcome_screen.dart';
 import 'package:sushishop/view/home/viewmodel/home_viewmodel.dart';
+import 'package:sushishop/view/cart/viewmodel/cart_viewmodel.dart';
+import 'package:sushishop/view/cart/view/cart_screen.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async {
@@ -30,7 +32,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => HomeViewModel())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        ChangeNotifierProvider(create: (_) => CartViewModel()),
+      ],
       child: MaterialApp(
         title: 'Sushi Shop',
         debugShowCheckedModeBanner: false,
@@ -255,6 +260,9 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        routes: {
+          '/cart': (context) => const CartScreen(),
+        },
         home: const WelcomeScreen(),
       ),
     );

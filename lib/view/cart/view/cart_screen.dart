@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constant/color.dart';
-import '../../../core/providers/cart_provider.dart';
+import '../viewmodel/cart_viewmodel.dart';
 import '../../../data/model/cart_item_model.dart';
 import '../../checkout/view/checkout_screen.dart';
 
@@ -24,7 +24,7 @@ class CartScreen extends StatelessWidget {
         backgroundColor: AppColor.primaryColor,
         elevation: 0,
       ),
-      body: Consumer<CartProvider>(
+      body: Consumer<CartViewModel>(
         builder: (context, cart, child) {
           if (cart.isEmpty) {
             return _buildEmptyCart(context);
@@ -97,7 +97,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCartItem(BuildContext context, CartProvider cart, CartItem item) {
+  Widget _buildCartItem(BuildContext context, CartViewModel cart, CartItem item) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
@@ -236,7 +236,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomBar(BuildContext context, CartProvider cart) {
+  Widget _buildBottomBar(BuildContext context, CartViewModel cart) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -265,7 +265,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${cart.total.toStringAsFixed(2)} €',
+                  '${cart.totalPrice.toStringAsFixed(2)} €',
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 16,
                     color: Colors.grey[600],
@@ -285,7 +285,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${cart.total.toStringAsFixed(2)} €',
+                  '${cart.totalPrice.toStringAsFixed(2)} €',
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -326,7 +326,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmation(BuildContext context, CartProvider cart, CartItem item) {
+  void _showDeleteConfirmation(BuildContext context, CartViewModel cart, CartItem item) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -345,7 +345,7 @@ class CartScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              cart.removeItem(item.product.id);
+              cart.removeProduct(item.product.id);
               Navigator.pop(context);
             },
             child: Text(

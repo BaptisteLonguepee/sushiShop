@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constant/color.dart';
-import '../../../core/providers/cart_provider.dart';
+import '../../cart/viewmodel/cart_viewmodel.dart';
 import '../../qr_scan/view/qr_scan_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cart = context.watch<CartProvider>();
+    final cart = context.watch<CartViewModel>();
 
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
@@ -58,7 +58,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget _buildOrderSummary(CartProvider cart) {
+  Widget _buildOrderSummary(CartViewModel cart) {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -110,7 +110,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
                 Text(
-                  '${cart.total.toStringAsFixed(2)} €',
+                  '${cart.totalPrice.toStringAsFixed(2)} €',
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -125,7 +125,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget _buildSubmitButton(CartProvider cart) {
+  Widget _buildSubmitButton(CartViewModel cart) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -148,11 +148,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  void _proceedToQrScan(CartProvider cart) {
+  void _proceedToQrScan(CartViewModel cart) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QrScanScreen(totalAmount: cart.total),
+        builder: (context) => QrScanScreen(totalAmount: cart.totalPrice),
       ),
     );
   }

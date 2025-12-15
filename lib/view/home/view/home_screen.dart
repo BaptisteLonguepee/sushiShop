@@ -6,6 +6,7 @@ import 'package:sushishop/core/widgets/japanese_pattern.dart';
 import 'package:sushishop/data/model/product_model.dart';
 import '../../../l10n/app_localizations.dart';
 import '../viewmodel/home_viewmodel.dart';
+import '../../cart/viewmodel/cart_viewmodel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,9 +35,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     _headerAnimationController.forward();
 
-    // Charger les produits au démarrage
+    // Charger les produits et catégories au démarrage
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomeViewModel>().fetchProducts();
+      context.read<HomeViewModel>().initialize();
     });
   }
 
@@ -175,41 +176,59 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                     ),
 
-                    // Icônes d'action
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.search,
-                        color: Colors.white,
-                        size: 24,
+                    // Bouton de recherche
+                    GestureDetector(
+                      onTap: () => _showSearchDialog(context),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.search,
+                          color: Colors.white,
+                          size: 24,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
 
-              // Barre de catégories (pour future extension)
-              Container(
-                height: 50,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                ),
-                child: Row(
-                  children: [
-                    _buildCategoryChip('Tout', isSelected: true),
-                    const SizedBox(width: 12),
-                    _buildCategoryChip('Sushi', isSelected: false),
-                    const SizedBox(width: 12),
-                    _buildCategoryChip('Maki', isSelected: false),
-                    const SizedBox(width: 12),
-                    _buildCategoryChip('Boissons', isSelected: false),
-                  ],
-                ),
+              // Barre de catégories dynamique
+              Consumer<HomeViewModel>(
+                builder: (context, viewModel, _) {
+                  return Container(
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        // Bouton "Tout"
+                        _buildCategoryChip(
+                          label: 'Tout',
+                          isSelected: viewModel.selectedCategory == null,
+                          onTap: () => viewModel.selectCategory(null),
+                        ),
+                        // Catégories dynamiques
+                        ...viewModel.categories.map((category) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 12),
+                            child: _buildCategoryChip(
+                              label: category.nom,
+                              isSelected: viewModel.selectedCategory?.id == category.id,
+                              onTap: () => viewModel.selectCategory(category),
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -218,24 +237,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildCategoryChip(String label, {required bool isSelected}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: isSelected 
-            ? Colors.white 
-            : Colors.white.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(20),
-        border: isSelected 
-            ? Border.all(color: AppColor.gold, width: 2)
-            : null,
-      ),
-      child: Text(
-        label,
-        style: GoogleFonts.notoSans(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-          color: isSelected ? AppColor.primaryColor : Colors.white,
+  Widget _buildCategoryChip({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected 
+              ? Colors.white 
+              : Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(20),
+          border: isSelected 
+              ? Border.all(color: AppColor.gold, width: 2)
+              : null,
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.notoSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: isSelected ? AppColor.primaryColor : Colors.white,
+          ),
         ),
       ),
     );
@@ -391,128 +417,220 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildCartBar(AppLocalizations localizations) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
+    return Consumer<CartViewModel>(
+      builder: (context, cartViewModel, _) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, -5),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          // Icône panier avec badge
-          Stack(
-            clipBehavior: Clip.none,
+          child: Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColor.lightGold,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.shopping_cart,
-                  color: AppColor.primaryColor,
-                  size: 28,
+              // Icône panier avec badge
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColor.lightGold,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.shopping_cart,
+                      color: AppColor.primaryColor,
+                      size: 28,
+                    ),
+                  ),
+                  if (cartViewModel.itemCount > 0)
+                    Positioned(
+                      right: -5,
+                      top: -5,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: const BoxDecoration(
+                          color: AppColor.primaryColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '${cartViewModel.itemCount}',
+                          style: GoogleFonts.notoSans(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+
+              const SizedBox(width: 16),
+
+              // Info panier
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Votre commande',
+                      style: GoogleFonts.notoSans(
+                        fontSize: 14,
+                        color: AppColor.cardColor,
+                      ),
+                    ),
+                    Text(
+                      '${cartViewModel.totalPrice.toStringAsFixed(2)} €',
+                      style: GoogleFonts.notoSans(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.primaryColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Positioned(
-                right: -5,
-                top: -5,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: const BoxDecoration(
-                    color: AppColor.primaryColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Text(
-                    '0',
-                    style: GoogleFonts.notoSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+
+              // Bouton commander
+              Container(
+                decoration: BoxDecoration(
+                  gradient: AppColor.primaryGradient,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColor.gold, width: 2),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: cartViewModel.isEmpty
+                        ? null
+                        : () {
+                            // TODO: Aller au panier
+                            Navigator.pushNamed(context, '/cart');
+                          },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Opacity(
+                      opacity: cartViewModel.isEmpty ? 0.5 : 1.0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 14,
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              'COMMANDER',
+                              style: GoogleFonts.notoSans(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const Icon(
+                              Icons.arrow_forward,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
             ],
           ),
+        );
+      },
+    );
+  }
 
-          const SizedBox(width: 16),
-
-          // Info panier
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Votre commande',
-                  style: GoogleFonts.notoSans(
-                    fontSize: 14,
-                    color: AppColor.cardColor,
-                  ),
-                ),
-                Text(
-                  '0.00 €',
-                  style: GoogleFonts.notoSans(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+  void _showSearchDialog(BuildContext context) {
+    final viewModel = context.read<HomeViewModel>();
+    
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.search,
                     color: AppColor.primaryColor,
+                    size: 28,
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          // Bouton commander
-          Container(
-            decoration: BoxDecoration(
-              gradient: AppColor.primaryGradient,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColor.gold, width: 2),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  // TODO: Aller au panier
-                },
-                borderRadius: BorderRadius.circular(12),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 14,
+                  const SizedBox(width: 12),
+                  Text(
+                    'Rechercher',
+                    style: GoogleFonts.notoSerif(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.black,
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      Text(
-                        'COMMANDER',
-                        style: GoogleFonts.notoSans(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Icon(
-                        Icons.arrow_forward,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ],
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close),
                   ),
-                ),
+                ],
               ),
-            ),
+              const SizedBox(height: 20),
+              TextField(
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: 'Nom du produit...',
+                  prefixIcon: const Icon(Icons.restaurant),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: AppColor.gold),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
+                  ),
+                ),
+                onChanged: (value) {
+                  viewModel.searchProducts(value);
+                },
+                onSubmitted: (value) {
+                  Navigator.pop(context);
+                },
+              ),
+              const SizedBox(height: 16),
+              Consumer<HomeViewModel>(
+                builder: (context, vm, _) {
+                  if (vm.searchQuery.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+                  return Text(
+                    '${vm.products.length} produit(s) trouvé(s)',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 14,
+                      color: AppColor.cardColor,
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -919,6 +1037,9 @@ class _ProductDetailsSheet extends StatelessWidget {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () {
+                              // Ajouter au panier
+                              context.read<CartViewModel>().addProduct(product);
+                              
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
