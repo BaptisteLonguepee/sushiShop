@@ -4,7 +4,7 @@ import '../model/product_model.dart';
 class ProductRepository {
   final SupabaseClient supabase = Supabase.instance.client;
 
-  final String table = 'product'; // <-- nom de table Supabase
+  final String table = 'produits'; // Nom de la table dans Supabase
 
   // 🔹 Récupérer tous les produits
   Future<List<Product>> getAllProducts() async {

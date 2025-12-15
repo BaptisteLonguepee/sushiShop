@@ -8,9 +8,9 @@ class Product {
   // Convert Supabase JSON → Product
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      id: map['id'],
-      name: map['name'],
-      price: (map['price'] as num).toDouble(),
+      id: map['id'] ?? 0,
+      name: map['name']?.toString() ?? map['nom']?.toString() ?? 'Produit sans nom',
+      price: ((map['price'] ?? map['prix']) as num?)?.toDouble() ?? 0.0,
     );
   }
 }

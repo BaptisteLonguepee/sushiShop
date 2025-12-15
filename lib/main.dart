@@ -4,9 +4,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:sushishop/core/constant/color.dart';
 import 'package:sushishop/view/welcome/view/welcome_screen.dart';
 import 'package:sushishop/view/home/viewmodel/home_viewmodel.dart';
-import 'package:sushishop/core/providers/locale_provider.dart';
 import 'l10n/app_localizations.dart';
 
 void main() async {
@@ -30,73 +30,232 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => HomeViewModel()),
-        ChangeNotifierProvider(create: (_) => LocaleProvider()),
-      ],
-      child: Consumer<LocaleProvider>(
-        builder: (context, localeProvider, child) {
-          return MaterialApp(
-            title: 'Sushi Shop',
-            debugShowCheckedModeBanner: false,
-            locale: localeProvider.locale,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [Locale('en'), Locale('fr')],
+      providers: [ChangeNotifierProvider(create: (_) => HomeViewModel())],
+      child: MaterialApp(
+        title: 'Sushi Shop',
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('en'), Locale('fr')],
         theme: ThemeData(
-          useMaterial3: true,
-          textTheme: GoogleFonts.kaiseiOptiTextTheme(),
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFFB1464A),
-            primary: const Color(0xFFB1464A),
-            secondary: const Color(0xFFDFDFDF),
-            background: const Color(0xFFF5F5F5),
-            surface: Colors.white,
+          // Polices de caractères avec thème japonais
+          textTheme: GoogleFonts.notoSansTextTheme().copyWith(
+            displayLarge: GoogleFonts.notoSerif(
+              fontSize: 96,
+              fontWeight: FontWeight.w300,
+              letterSpacing: -1.5,
+            ),
+            displayMedium: GoogleFonts.notoSerif(
+              fontSize: 60,
+              fontWeight: FontWeight.w300,
+              letterSpacing: -0.5,
+            ),
+            displaySmall: GoogleFonts.notoSerif(
+              fontSize: 48,
+              fontWeight: FontWeight.w400,
+            ),
+            headlineMedium: GoogleFonts.notoSans(
+              fontSize: 34,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 0.25,
+            ),
+            headlineSmall: GoogleFonts.notoSans(
+              fontSize: 24,
+              fontWeight: FontWeight.w400,
+            ),
+            titleLarge: GoogleFonts.notoSans(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.15,
+            ),
+            titleMedium: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 0.15,
+            ),
+            titleSmall: GoogleFonts.notoSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.1,
+            ),
+            bodyLarge: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 0.5,
+            ),
+            bodyMedium: GoogleFonts.notoSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 0.25,
+            ),
           ),
-          scaffoldBackgroundColor: const Color(0xFFDFDFDF),
+
+          // Palette de couleurs
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: AppColor.primaryColor,
+            primary: AppColor.primaryColor,
+            secondary: AppColor.gold,
+            surface: Colors.white,
+            background: AppColor.cream,
+            error: AppColor.error,
+            onPrimary: Colors.white,
+            onSecondary: AppColor.black,
+            onSurface: AppColor.black,
+            onBackground: AppColor.black,
+            onError: Colors.white,
+          ),
+
+          // Configuration de l'AppBar
           appBarTheme: AppBarTheme(
-            backgroundColor: const Color(0xFFB1464A),
-            foregroundColor: Colors.white,
-            centerTitle: true,
             elevation: 0,
-            titleTextStyle: GoogleFonts.kaiseiOpti(
+            centerTitle: true,
+            backgroundColor: AppColor.primaryColor,
+            foregroundColor: Colors.white,
+            titleTextStyle: GoogleFonts.notoSerif(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
+            iconTheme: const IconThemeData(
+              color: Colors.white,
+              size: 24,
+            ),
           ),
+
+          // Configuration des boutons élevés
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFB1464A),
+              backgroundColor: AppColor.primaryColor,
               foregroundColor: Colors.white,
-              textStyle: GoogleFonts.kaiseiOpti(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              elevation: 4,
+              shadowColor: AppColor.primaryColor.withOpacity(0.3),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 16,
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 32,
-                vertical: 16,
+              textStyle: GoogleFonts.notoSans(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1,
               ),
             ),
           ),
-          cardTheme: CardThemeData(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-              side: const BorderSide(color: Color(0xFFD4AF37), width: 2),
+
+          // Configuration des boutons texte
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: AppColor.primaryColor,
+              textStyle: GoogleFonts.notoSans(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
+
+          // Configuration des cartes
+          cardTheme: CardThemeData(
+            elevation: 4,
+            shadowColor: Colors.black.withOpacity(0.1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+              side: BorderSide(
+                color: AppColor.gold.withOpacity(0.2),
+                width: 2,
+              ),
+            ),
+            color: Colors.white,
+          ),
+
+          // Configuration des champs de texte
+          inputDecorationTheme: InputDecorationTheme(
+            filled: true,
+            fillColor: AppColor.lightGold.withOpacity(0.3),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(
+                color: AppColor.gold.withOpacity(0.3),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(
+                color: AppColor.gold.withOpacity(0.3),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(
+                color: AppColor.primaryColor,
+                width: 2,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(
+                color: AppColor.error,
+              ),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 16,
+            ),
+            labelStyle: GoogleFonts.notoSans(
+              color: AppColor.cardColor,
+            ),
+            hintStyle: GoogleFonts.notoSans(
+              color: AppColor.cardColor.withOpacity(0.6),
+            ),
+          ),
+
+          // Configuration des dialogues
+          dialogTheme: DialogThemeData(
+            elevation: 10,
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            titleTextStyle: GoogleFonts.notoSerif(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppColor.black,
+            ),
+            contentTextStyle: GoogleFonts.notoSans(
+              fontSize: 16,
+              color: AppColor.black,
+            ),
+          ),
+
+          // Configuration des Snackbars
+          snackBarTheme: SnackBarThemeData(
+            backgroundColor: AppColor.primaryColor,
+            contentTextStyle: GoogleFonts.notoSans(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+
+          // Configuration des indicateurs de progression
+          progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: AppColor.primaryColor,
+          ),
+
+          // Usability
+          useMaterial3: true,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: const WelcomeScreen(),
-          );
-        },
       ),
     );
   }
