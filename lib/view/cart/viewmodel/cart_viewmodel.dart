@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../../data/model/product_model.dart';
 import '../../../data/model/cart_item_model.dart';
 
@@ -15,28 +14,29 @@ class CartViewModel extends ChangeNotifier {
   bool get isEmpty => _items.isEmpty;
 
   // Ajouter un produit au panier
-  void addProduct(Product product, {int quantity = 1}) {
+  void addProduct(Product product, {int quantity = 1, String? notes}) {
     // Vérifier si le produit existe déjà
-    final existingIndex = _items.indexWhere((item) => item.product.id == product.id);
+    final existingIndex = _items.indexWhere(
+      (item) => item.product.id == product.id,
+    );
 
     if (existingIndex != -1) {
       // Augmenter la quantité
       _items[existingIndex].quantity += quantity;
+      // Mettre à jour les notes si fournies
+      if (notes != null) {
+        _items[existingIndex].notes = notes;
+      }
     } else {
       // Ajouter un nouvel article
-      _items.add(CartItem(
-        product: product,
-        quantity: quantity,
-      ));
+      _items.add(CartItem(product: product, quantity: quantity, notes: notes));
     }
-    HapticFeedback.lightImpact();
     notifyListeners();
   }
 
   // Retirer un produit du panier
   void removeProduct(int productId) {
     _items.removeWhere((item) => item.product.id == productId);
-    HapticFeedback.mediumImpact();
     notifyListeners();
   }
 
@@ -45,7 +45,6 @@ class CartViewModel extends ChangeNotifier {
     final index = _items.indexWhere((item) => item.product.id == productId);
     if (index != -1) {
       _items[index].quantity++;
-      HapticFeedback.selectionClick();
       notifyListeners();
     }
   }
@@ -56,10 +55,8 @@ class CartViewModel extends ChangeNotifier {
     if (index != -1) {
       if (_items[index].quantity > 1) {
         _items[index].quantity--;
-        HapticFeedback.selectionClick();
       } else {
         _items.removeAt(index);
-        HapticFeedback.mediumImpact();
       }
       notifyListeners();
     }
@@ -75,14 +72,8 @@ class CartViewModel extends ChangeNotifier {
   int getProductQuantity(int productId) {
     final item = _items.firstWhere(
       (item) => item.product.id == productId,
-      orElse: () => CartItem(
-        product: Product(
-          id: -1,
-          categoryId: 0,
-          nom: '',
-          prix: 0,
-        ),
-      ),
+      orElse: () =>
+          CartItem(product: Product(id: -1, categoryId: 0, nom: '', prix: 0)),
     );
     return item.product.id == -1 ? 0 : item.quantity;
   }

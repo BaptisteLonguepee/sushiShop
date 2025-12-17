@@ -30,10 +30,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future.wait([
-        _loadCategories(),
-        _loadProducts(),
-      ]);
+      await Future.wait([_loadCategories(), _loadProducts()]);
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -88,14 +85,16 @@ class HomeViewModel extends ChangeNotifier {
   void _applyFilters() {
     _filteredProducts = _products.where((product) {
       // Filtre par catégorie
-      bool matchesCategory = _selectedCategory == null || 
-                             product.categoryId == _selectedCategory!.id;
-      
+      bool matchesCategory =
+          _selectedCategory == null ||
+          product.categoryId == _selectedCategory!.id;
+
       // Filtre par recherche
-      bool matchesSearch = _searchQuery.isEmpty ||
-                          product.nom.toLowerCase().contains(_searchQuery) ||
-                          (product.description?.toLowerCase().contains(_searchQuery) ?? false);
-      
+      bool matchesSearch =
+          _searchQuery.isEmpty ||
+          product.nom.toLowerCase().contains(_searchQuery) ||
+          (product.description?.toLowerCase().contains(_searchQuery) ?? false);
+
       return matchesCategory && matchesSearch;
     }).toList();
   }

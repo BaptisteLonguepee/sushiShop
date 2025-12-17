@@ -36,7 +36,7 @@ class OrderTypeViewModel extends ChangeNotifier {
       return;
     }
 
-    if (_model.selectedOrderType == OrderType.dineIn && 
+    if (_model.selectedOrderType == OrderType.dineIn &&
         _model.tableNumber == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

@@ -110,10 +110,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmation_total_amount => 'Total amount';
 
   @override
-  String get confirmation_estimated_time => 'Estimated preparation time: 15-20 min';
+  String get confirmation_estimated_time =>
+      'Estimated preparation time: 15-20 min';
 
   @override
-  String get confirmation_notification_info => 'You will receive a notification when your order is ready';
+  String get confirmation_notification_info =>
+      'You will receive a notification when your order is ready';
 
   @override
   String get confirmation_back_home => 'Back to home';
@@ -154,13 +156,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get payment_terminal_title => 'Payment terminal';
 
   @override
-  String get payment_terminal_instruction => 'Please insert or present your bank card to the payment terminal';
+  String get payment_terminal_instruction =>
+      'Please insert or present your bank card to the payment terminal';
 
   @override
   String get payment_contactless => 'Contactless accepted';
 
   @override
-  String get payment_counter_info => 'Please go to the counter with your order number to make the payment.';
+  String get payment_counter_info =>
+      'Please go to the counter with your order number to make the payment.';
 
   @override
   String get payment_processing => 'Payment in progress...';
@@ -188,7 +192,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get qr_scan_instruction => 'Please scan the QR code of your table';
 
   @override
-  String get qr_scan_required => 'The table number is required to validate your order';
+  String get qr_scan_required =>
+      'The table number is required to validate your order';
 
   @override
   String qr_scan_table(String tableNumber) {

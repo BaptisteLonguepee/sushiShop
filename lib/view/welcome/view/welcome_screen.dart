@@ -23,7 +23,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void initState() {
     super.initState();
     _viewModel = WelcomeViewModel();
-    
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
@@ -56,20 +56,14 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              AppColor.cream,
-              Colors.white,
-              AppColor.lightGold,
-            ],
+            colors: [AppColor.cream, Colors.white, AppColor.lightGold],
           ),
         ),
         child: Stack(
           fit: StackFit.expand,
           children: [
             // Motif japonais en arrière-plan
-            const Positioned.fill(
-              child: JapanesePattern(opacity: 0.03),
-            ),
+            const Positioned.fill(child: JapanesePattern(opacity: 0.03)),
 
             // Particules flottantes
             const Positioned.fill(
@@ -102,7 +96,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                 gradient: AppColor.primaryGradient,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColor.primaryColor.withValues(alpha: 0.4),
+                                    color: AppColor.primaryColor.withValues(
+                                      alpha: 0.4,
+                                    ),
                                     blurRadius: 30,
                                     spreadRadius: 5,
                                   ),
@@ -190,7 +186,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                               borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColor.primaryColor.withValues(alpha: 0.3),
+                                  color: AppColor.primaryColor.withValues(
+                                    alpha: 0.3,
+                                  ),
                                   blurRadius: 20,
                                   offset: const Offset(0, 10),
                                 ),
@@ -199,7 +197,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             child: Material(
                               color: Colors.transparent,
                               child: InkWell(
-                                onTap: () => _viewModel.navigateToNextScreen(context),
+                                onTap: () =>
+                                    _viewModel.navigateToNextScreen(context),
                                 borderRadius: BorderRadius.circular(20),
                                 child: Ink(
                                   decoration: BoxDecoration(
@@ -214,7 +213,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                     height: 80,
                                     alignment: Alignment.center,
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         const Icon(
                                           Icons.touch_app,
@@ -223,7 +223,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                         ),
                                         const SizedBox(width: 16),
                                         Text(
-                                          localizations?.touch_to_start.toUpperCase() ?? 'TOUCH TO START',
+                                          localizations?.touch_to_start
+                                                  .toUpperCase() ??
+                                              'TOUCH TO START',
                                           style: GoogleFonts.notoSans(
                                             fontSize: 24,
                                             fontWeight: FontWeight.bold,

@@ -2,31 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constant/color.dart';
-import '../../../core/providers/cart_provider.dart';
 import '../../../data/model/product_model.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../cart/viewmodel/cart_viewmodel.dart';
+import '../viewmodel/product_detail_viewmodel.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
 
-  const ProductDetailScreen({
-    super.key,
-    required this.product,
-  });
+  const ProductDetailScreen({super.key, required this.product});
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  int _quantity = 1;
-  String? _selectedSize;
-  final List<String> _selectedExtras = [];
   final TextEditingController _notesController = TextEditingController();
+  late ProductDetailViewModel _viewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel = ProductDetailViewModel(widget.product);
+    _notesController.addListener(() {
+      _viewModel.setNotes(_notesController.text);
+    });
+  }
 
   @override
   void dispose() {
     _notesController.dispose();
+    _viewModel.dispose();
     super.dispose();
   }
 
@@ -50,95 +56,87 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     };
   }
 
-  double _getTotalPrice(AppLocalizations localizations) {
-    final sizes = _getSizes(localizations);
-    final extras = _getExtras(localizations);
-    
-    double basePrice = widget.product.prix;
-    double sizeExtra = _selectedSize != null ? (sizes[_selectedSize] ?? 0.0) : 0.0;
-    double extrasTotal = _selectedExtras.fold(
-      0.0,
-      (sum, extra) => sum + (extras[extra] ?? 0.0),
-    );
-    return (basePrice + sizeExtra + extrasTotal) * _quantity;
-  }
-
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    
-    return Scaffold(
-      backgroundColor: AppColor.secondaryColor,
-      appBar: AppBar(
-        title: Text(
-          widget.product.nom,
-          style: GoogleFonts.kaiseiOpti(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: AppColor.primaryColor,
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Image du produit
-                  _buildProductImage(),
 
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Nom et prix
-                        _buildProductHeader(),
-                        const SizedBox(height: 16),
-
-                        // Description
-                        if (widget.product.description != null) ...[
-                          _buildDescription(localizations),
-                          const SizedBox(height: 16),
-                        ],
-
-                        // Allergènes
-                        if (widget.product.allergens != null) ...[
-                          _buildAllergens(localizations),
-                          const SizedBox(height: 16),
-                        ],
-
-                        // Tags (végétarien, vegan)
-                        _buildTags(localizations),
-                        const SizedBox(height: 24),
-
-                        // Sélection de taille
-                        _buildSizeSelector(localizations),
-                        const SizedBox(height: 24),
-
-                        // Extras
-                        _buildExtrasSelector(localizations),
-                        const SizedBox(height: 24),
-
-                        // Notes personnalisées
-                        _buildNotesField(localizations),
-                        const SizedBox(height: 24),
-
-                        // Quantité
-                        _buildQuantitySelector(localizations),
-                        const SizedBox(height: 100), // Espace pour le bouton fixe
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+    return ChangeNotifierProvider<ProductDetailViewModel>.value(
+      value: _viewModel,
+      child: Scaffold(
+        backgroundColor: AppColor.secondaryColor,
+        appBar: AppBar(
+          title: Text(
+            widget.product.nom,
+            style: GoogleFonts.kaiseiOpti(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          _buildAddToCartButton(context, localizations),
-        ],
+          backgroundColor: AppColor.primaryColor,
+          elevation: 0,
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Image du produit
+                    _buildProductImage(),
+
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Nom et prix
+                          _buildProductHeader(),
+                          const SizedBox(height: 16),
+
+                          // Description
+                          if (widget.product.description != null) ...[
+                            _buildDescription(localizations),
+                            const SizedBox(height: 16),
+                          ],
+
+                          // Allergènes
+                          if (widget.product.allergens != null) ...[
+                            _buildAllergens(localizations),
+                            const SizedBox(height: 16),
+                          ],
+
+                          // Tags (végétarien, vegan)
+                          _buildTags(localizations),
+                          const SizedBox(height: 24),
+
+                          // Sélection de taille
+                          _buildSizeSelector(localizations),
+                          const SizedBox(height: 24),
+
+                          // Extras
+                          _buildExtrasSelector(localizations),
+                          const SizedBox(height: 24),
+
+                          // Notes personnalisées
+                          _buildNotesField(localizations),
+                          const SizedBox(height: 24),
+
+                          // Quantité
+                          _buildQuantitySelector(localizations),
+                          const SizedBox(
+                            height: 100,
+                          ), // Espace pour le bouton fixe
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            _buildAddToCartButton(context, localizations),
+          ],
+        ),
       ),
     );
   }
@@ -152,17 +150,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ? Image.network(
               widget.product.imageUrl!,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Icon(
-                Icons.restaurant,
-                size: 80,
-                color: Colors.grey[400],
-              ),
+              errorBuilder: (context, error, stackTrace) =>
+                  Icon(Icons.restaurant, size: 80, color: Colors.grey[400]),
             )
-          : Icon(
-              Icons.restaurant,
-              size: 80,
-              color: Colors.grey[400],
-            ),
+          : Icon(Icons.restaurant, size: 80, color: Colors.grey[400]),
     );
   }
 
@@ -296,90 +287,92 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Widget _buildSizeSelector(AppLocalizations localizations) {
     final sizes = _getSizes(localizations);
-    
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          localizations.product_size,
-          style: GoogleFonts.kaiseiOpti(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: AppColor.primaryColor,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 12,
-          children: sizes.entries.map((entry) {
-            final isSelected = _selectedSize == entry.key;
-            return ChoiceChip(
-              label: Text(
-                '${entry.key}${entry.value > 0 ? ' (+${entry.value.toStringAsFixed(2)}€)' : ''}',
-                style: GoogleFonts.kaiseiOpti(
-                  color: isSelected ? Colors.white : Colors.black87,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                ),
+
+    return Consumer<ProductDetailViewModel>(
+      builder: (context, viewModel, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              localizations.product_size,
+              style: GoogleFonts.kaiseiOpti(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColor.primaryColor,
               ),
-              selected: isSelected,
-              onSelected: (selected) {
-                setState(() {
-                  _selectedSize = selected ? entry.key : null;
-                });
-              },
-              selectedColor: AppColor.primaryColor,
-              backgroundColor: Colors.white,
-            );
-          }).toList(),
-        ),
-      ],
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 12,
+              children: sizes.entries.map((entry) {
+                final isSelected = viewModel.selectedSize == entry.key;
+                return ChoiceChip(
+                  label: Text(
+                    '${entry.key}${entry.value > 0 ? ' (+${entry.value.toStringAsFixed(2)}€)' : ''}',
+                    style: GoogleFonts.kaiseiOpti(
+                      color: isSelected ? Colors.white : Colors.black87,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                    ),
+                  ),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    viewModel.selectSize(selected ? entry.key : null);
+                  },
+                  selectedColor: AppColor.primaryColor,
+                  backgroundColor: Colors.white,
+                );
+              }).toList(),
+            ),
+          ],
+        );
+      },
     );
   }
 
   Widget _buildExtrasSelector(AppLocalizations localizations) {
     final extras = _getExtras(localizations);
-    
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          localizations.product_extras,
-          style: GoogleFonts.kaiseiOpti(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: AppColor.primaryColor,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ...extras.entries.map((entry) {
-          final isSelected = _selectedExtras.contains(entry.key);
-          return CheckboxListTile(
-            title: Text(
-              entry.key,
-              style: GoogleFonts.kaiseiOpti(fontSize: 16),
-            ),
-            subtitle: Text(
-              '+${entry.value.toStringAsFixed(2)} €',
+
+    return Consumer<ProductDetailViewModel>(
+      builder: (context, viewModel, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              localizations.product_extras,
               style: GoogleFonts.kaiseiOpti(
-                fontSize: 14,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
                 color: AppColor.primaryColor,
               ),
             ),
-            value: isSelected,
-            onChanged: (checked) {
-              setState(() {
-                if (checked == true) {
-                  _selectedExtras.add(entry.key);
-                } else {
-                  _selectedExtras.remove(entry.key);
-                }
-              });
-            },
-            activeColor: AppColor.primaryColor,
-            contentPadding: EdgeInsets.zero,
-          );
-        }),
-      ],
+            const SizedBox(height: 12),
+            ...extras.entries.map((entry) {
+              final isSelected = viewModel.selectedExtras.contains(entry.key);
+              return CheckboxListTile(
+                title: Text(
+                  entry.key,
+                  style: GoogleFonts.kaiseiOpti(fontSize: 16),
+                ),
+                subtitle: Text(
+                  '+${entry.value.toStringAsFixed(2)} €',
+                  style: GoogleFonts.kaiseiOpti(
+                    fontSize: 14,
+                    color: AppColor.primaryColor,
+                  ),
+                ),
+                value: isSelected,
+                onChanged: (checked) {
+                  viewModel.toggleExtra(entry.key);
+                },
+                activeColor: AppColor.primaryColor,
+                contentPadding: EdgeInsets.zero,
+              );
+            }),
+          ],
+        );
+      },
     );
   }
 
@@ -424,45 +417,54 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Widget _buildQuantitySelector(AppLocalizations localizations) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          localizations.product_quantity,
-          style: GoogleFonts.kaiseiOpti(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: AppColor.primaryColor,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
+    return Consumer<ProductDetailViewModel>(
+      builder: (context, viewModel, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildQuantityButton(
-              icon: Icons.remove,
-              onPressed: _quantity > 1 ? () => setState(() => _quantity--) : null,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                '$_quantity',
-                style: GoogleFonts.kaiseiOpti(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+            Text(
+              localizations.product_quantity,
+              style: GoogleFonts.kaiseiOpti(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColor.primaryColor,
               ),
             ),
-            _buildQuantityButton(
-              icon: Icons.add,
-              onPressed: () => setState(() => _quantity++),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                _buildQuantityButton(
+                  icon: Icons.remove,
+                  onPressed: viewModel.quantity > 1
+                      ? () => viewModel.decrementQuantity()
+                      : null,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Text(
+                    '${viewModel.quantity}',
+                    style: GoogleFonts.kaiseiOpti(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                _buildQuantityButton(
+                  icon: Icons.add,
+                  onPressed: () => viewModel.incrementQuantity(),
+                ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
-  Widget _buildQuantityButton({required IconData icon, VoidCallback? onPressed}) {
+  Widget _buildQuantityButton({
+    required IconData icon,
+    VoidCallback? onPressed,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: onPressed != null ? AppColor.primaryColor : Colors.grey[300],
@@ -475,90 +477,118 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildAddToCartButton(BuildContext context, AppLocalizations localizations) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
+  Widget _buildAddToCartButton(
+    BuildContext context,
+    AppLocalizations localizations,
+  ) {
+    return Consumer<ProductDetailViewModel>(
+      builder: (context, viewModel, child) {
+        final sizes = _getSizes(localizations);
+        final extras = _getExtras(localizations);
+        final totalPrice = viewModel.calculateTotalPrice(sizes, extras);
+
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 10,
+                offset: const Offset(0, -2),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  localizations.cart_total,
-                  style: GoogleFonts.kaiseiOpti(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      localizations.cart_total,
+                      style: GoogleFonts.kaiseiOpti(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '${totalPrice.toStringAsFixed(2)} €',
+                      style: GoogleFonts.kaiseiOpti(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.primaryColor,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  '${_getTotalPrice(localizations).toStringAsFixed(2)} €',
-                  style: GoogleFonts.kaiseiOpti(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.primaryColor,
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () =>
+                        _addToCart(context, localizations, viewModel),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.primaryColor,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: Text(
+                      localizations.addToCart,
+                      style: GoogleFonts.kaiseiOpti(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => _addToCart(context, localizations),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColor.primaryColor,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: Text(
-                  localizations.addToCart,
-                  style: GoogleFonts.kaiseiOpti(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
-  void _addToCart(BuildContext context, AppLocalizations localizations) {
-    final cart = context.read<CartProvider>();
-    
+  void _addToCart(
+    BuildContext context,
+    AppLocalizations localizations,
+    ProductDetailViewModel viewModel,
+  ) {
+    final cart = context.read<CartViewModel>();
+
     // Construire les notes avec les options sélectionnées
     String notes = '';
-    if (_selectedSize != null) {
-      notes += '${localizations.product_size}: $_selectedSize\n';
+    if (viewModel.selectedSize != null) {
+      notes += '${localizations.product_size}: ${viewModel.selectedSize}\n';
     }
-    if (_selectedExtras.isNotEmpty) {
-      notes += '${localizations.product_extras}: ${_selectedExtras.join(', ')}\n';
+    if (viewModel.selectedExtras.isNotEmpty) {
+      notes +=
+          '${localizations.product_extras}: ${viewModel.selectedExtras.join(', ')}\n';
     }
-    if (_notesController.text.isNotEmpty) {
-      notes += '${localizations.product_special_notes}: ${_notesController.text}';
+    if (viewModel.notes.isNotEmpty) {
+      notes += '${localizations.product_special_notes}: ${viewModel.notes}';
     }
 
-    cart.addItem(
+    cart.addProduct(
       widget.product,
-      quantity: _quantity,
+      quantity: viewModel.quantity,
       notes: notes.trim().isEmpty ? null : notes.trim(),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          localizations.product_added_to_cart(widget.product.nom),
+          style: GoogleFonts.kaiseiOpti(),
+        ),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 2),
+      ),
     );
 
     Navigator.pop(context);

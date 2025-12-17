@@ -120,10 +120,7 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
-            iconTheme: const IconThemeData(
-              color: Colors.white,
-              size: 24,
-            ),
+            iconTheme: const IconThemeData(color: Colors.white, size: 24),
           ),
 
           elevatedButtonTheme: ElevatedButtonThemeData(
@@ -132,10 +129,7 @@ class MyApp extends StatelessWidget {
               foregroundColor: Colors.white,
               elevation: 4,
               shadowColor: AppColor.primaryColor.withValues(alpha: 0.3),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 16,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -194,17 +188,13 @@ class MyApp extends StatelessWidget {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: AppColor.error,
-              ),
+              borderSide: const BorderSide(color: AppColor.error),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 16,
             ),
-            labelStyle: GoogleFonts.notoSans(
-              color: AppColor.cardColor,
-            ),
+            labelStyle: GoogleFonts.notoSans(color: AppColor.cardColor),
             hintStyle: GoogleFonts.notoSans(
               color: AppColor.cardColor.withValues(alpha: 0.6),
             ),
@@ -247,9 +237,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        routes: {
-          '/cart': (context) => const CartScreen(),
-        },
+        routes: {'/cart': (context) => const CartScreen()},
         home: const WelcomeScreen(),
       ),
     );

@@ -3,14 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constant/color.dart';
-import '../../../core/providers/cart_provider.dart';
-import '../../../data/model/commande_model.dart';
-import '../../../data/model/commande_article_model.dart';
-import '../../../data/repository/commande_repository.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../cart/viewmodel/cart_viewmodel.dart';
+import '../viewmodel/payment_viewmodel.dart';
 import '../../confirmation/view/confirmation_screen.dart';
 
-class PaymentScreen extends StatefulWidget {
+class PaymentScreen extends StatelessWidget {
   final double totalAmount;
   final String tableNumber;
 
@@ -21,17 +19,34 @@ class PaymentScreen extends StatefulWidget {
   });
 
   @override
-  State<PaymentScreen> createState() => _PaymentScreenState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => PaymentViewModel(),
+      child: _PaymentScreenContent(
+        totalAmount: totalAmount,
+        tableNumber: tableNumber,
+      ),
+    );
+  }
 }
 
-class _PaymentScreenState extends State<PaymentScreen> {
+class _PaymentScreenContent extends StatefulWidget {
+  final double totalAmount;
+  final String tableNumber;
+
+  const _PaymentScreenContent({
+    required this.totalAmount,
+    required this.tableNumber,
+  });
+
+  @override
+  State<_PaymentScreenContent> createState() => _PaymentScreenContentState();
+}
+
+class _PaymentScreenContentState extends State<_PaymentScreenContent> {
   final _cardNumberController = TextEditingController();
   final _expiryController = TextEditingController();
   final _cvvController = TextEditingController();
-  final _commandeRepository = CommandeRepository();
-  
-  String _selectedPaymentMethod = 'card';
-  bool _isProcessing = false;
 
   @override
   void dispose() {
@@ -43,8 +58,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<PaymentViewModel>();
     final localizations = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
       appBar: AppBar(
@@ -68,20 +84,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
             const SizedBox(height: 24),
 
             // Méthode de paiement
-            _buildPaymentMethodSelector(localizations),
+            _buildPaymentMethodSelector(localizations, viewModel),
             const SizedBox(height: 24),
 
             // Formulaire de paiement mocké
-            if (_selectedPaymentMethod == 'card') ...[
+            if (viewModel.selectedPaymentMethod == 'card') ...[
               _buildCardPaymentForm(localizations),
-            ] else if (_selectedPaymentMethod == 'cash') ...[
+            ] else if (viewModel.selectedPaymentMethod == 'cash') ...[
               _buildCashPaymentInfo(localizations),
             ],
 
             const SizedBox(height: 32),
 
             // Bouton de paiement
-            _buildPaymentButton(localizations),
+            _buildPaymentButton(localizations, viewModel),
           ],
         ),
       ),
@@ -91,9 +107,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget _buildSummaryCard(AppLocalizations localizations) {
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -110,7 +124,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.green[50],
                     borderRadius: BorderRadius.circular(20),
@@ -154,7 +171,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Widget _buildPaymentMethodSelector(AppLocalizations localizations) {
+  Widget _buildPaymentMethodSelector(
+    AppLocalizations localizations,
+    PaymentViewModel viewModel,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -168,12 +188,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ),
         const SizedBox(height: 16),
         _buildPaymentMethodOption(
+          viewModel: viewModel,
           value: 'card',
           icon: Icons.credit_card,
           title: localizations.payment_card,
         ),
         const SizedBox(height: 12),
         _buildPaymentMethodOption(
+          viewModel: viewModel,
           value: 'cash',
           icon: Icons.store,
           title: localizations.payment_counter,
@@ -183,13 +205,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget _buildPaymentMethodOption({
+    required PaymentViewModel viewModel,
     required String value,
     required IconData icon,
     required String title,
   }) {
-    final isSelected = _selectedPaymentMethod == value;
+    final isSelected = viewModel.selectedPaymentMethod == value;
     return InkWell(
-      onTap: () => setState(() => _selectedPaymentMethod = value),
+      onTap: () => viewModel.selectPaymentMethod(value),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -235,11 +258,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
       child: Column(
         children: [
-          Icon(
-            Icons.credit_card,
-            size: 80,
-            color: Colors.blue[700],
-          ),
+          Icon(Icons.credit_card, size: 80, color: Colors.blue[700]),
           const SizedBox(height: 20),
           Text(
             localizations.payment_terminal_title,
@@ -311,11 +330,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Widget _buildPaymentButton(AppLocalizations localizations) {
+  Widget _buildPaymentButton(
+    AppLocalizations localizations,
+    PaymentViewModel viewModel,
+  ) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: _isProcessing ? null : () => _processPayment(localizations),
+        onPressed: viewModel.isProcessing
+            ? null
+            : () => _processPayment(localizations, viewModel),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColor.primaryColor,
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -324,7 +348,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
           disabledBackgroundColor: Colors.grey[400],
         ),
-        child: _isProcessing
+        child: viewModel.isProcessing
             ? Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -338,8 +362,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    _selectedPaymentMethod == 'card' 
-                        ? localizations.payment_processing 
+                    viewModel.selectedPaymentMethod == 'card'
+                        ? localizations.payment_processing
                         : localizations.payment_validating,
                     style: GoogleFonts.kaiseiOpti(
                       fontSize: 14,
@@ -349,8 +373,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ],
               )
             : Text(
-                _selectedPaymentMethod == 'card'
-                    ? localizations.payment_process_card(widget.totalAmount.toStringAsFixed(2))
+                viewModel.selectedPaymentMethod == 'card'
+                    ? localizations.payment_process_card(
+                        widget.totalAmount.toStringAsFixed(2),
+                      )
                     : localizations.payment_validate_order,
                 style: GoogleFonts.kaiseiOpti(
                   fontSize: 20,
@@ -361,77 +387,49 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Future<void> _processPayment(AppLocalizations localizations) async {
+  Future<void> _processPayment(
+    AppLocalizations localizations,
+    PaymentViewModel viewModel,
+  ) async {
     HapticFeedback.mediumImpact();
-    setState(() {
-      _isProcessing = true;
-    });
 
-    // Get cart reference before async gap
-    final cart = context.read<CartProvider>();
+    // Get cart reference
+    final cart = context.read<CartViewModel>();
 
-    // Simulate communication with payment terminal
-    // Wait 3 seconds to simulate processing
-    await Future.delayed(const Duration(seconds: 3));
+    // Traiter le paiement via le ViewModel
+    final success = await viewModel.processPayment(
+      totalAmount: widget.totalAmount,
+      tableNumber: widget.tableNumber,
+      cartItems: cart.items,
+    );
 
-    // Create order
-    try {
-      final orderNumber = await _commandeRepository.generateNumeroCommande();
-
-      final commande = Commande(
-        id: 0,
-        numeroCommande: orderNumber,
-        statut: 'confirmee',
-        total: widget.totalAmount,
-        nomClient: 'Table ${widget.tableNumber}',
-        telephone: null,
-        email: null,
-        notesSpecial: 'Table: ${widget.tableNumber}',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
-
-      final createdOrder = await _commandeRepository.createCommande(commande);
-
-      final articles = cart.items.map((item) {
-        return CommandeArticle(
-          id: 0,
-          commandeId: createdOrder.id,
-          produitId: item.product.id,
-          quantite: item.quantity,
-          prixUnitaire: item.product.prix,
-          notesArticle: item.notes,
-          createdAt: DateTime.now(),
-        );
-      }).toList();
-
-      await _commandeRepository.addArticles(articles);
-
+    if (success && viewModel.createdOrder != null) {
+      // Vider le panier
       cart.clear();
 
       HapticFeedback.heavyImpact();
 
       if (!mounted) return;
-      
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => ConfirmationScreen(commande: createdOrder),
+          builder: (context) =>
+              ConfirmationScreen(commande: viewModel.createdOrder!),
         ),
         (route) => false,
       );
-    } catch (e) {
+    } else {
       HapticFeedback.vibrate();
-      setState(() {
-        _isProcessing = false;
-      });
 
       if (!mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            localizations.payment_error(e.toString()),
+            localizations.payment_error(
+              viewModel.errorMessage ?? 'Erreur inconnue',
+            ),
             style: GoogleFonts.kaiseiOpti(),
           ),
           backgroundColor: Colors.red,

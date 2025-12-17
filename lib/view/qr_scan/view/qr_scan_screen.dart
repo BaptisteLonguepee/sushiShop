@@ -1,30 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../../../core/constant/color.dart';
 import '../../../l10n/app_localizations.dart';
+import '../viewmodel/qr_scan_viewmodel.dart';
 import '../../payment/view/payment_screen.dart';
 
-class QrScanScreen extends StatefulWidget {
+class QrScanScreen extends StatelessWidget {
   final double totalAmount;
 
-  const QrScanScreen({
-    super.key,
-    required this.totalAmount,
-  });
-
-  @override
-  State<QrScanScreen> createState() => _QrScanScreenState();
-}
-
-class _QrScanScreenState extends State<QrScanScreen> {
-  String? _scannedTableNumber;
-  bool _isScanning = false;
+  const QrScanScreen({super.key, required this.totalAmount});
 
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => QrScanViewModel(),
+      child: _QrScanScreenContent(totalAmount: totalAmount),
+    );
+  }
+}
+
+class _QrScanScreenContent extends StatelessWidget {
+  final double totalAmount;
+
+  const _QrScanScreenContent({required this.totalAmount});
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.watch<QrScanViewModel>();
     final localizations = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
       appBar: AppBar(
@@ -86,7 +92,7 @@ class _QrScanScreenState extends State<QrScanScreen> {
             const SizedBox(height: 40),
 
             // Affichage du numéro scanné
-            if (_scannedTableNumber != null) ...[
+            if (viewModel.hasScannedTable) ...[
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -97,10 +103,16 @@ class _QrScanScreenState extends State<QrScanScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.check_circle, color: Colors.green, size: 30),
+                    const Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 30,
+                    ),
                     const SizedBox(width: 12),
                     Text(
-                      localizations.qr_scan_table(_scannedTableNumber!),
+                      localizations.qr_scan_table(
+                        viewModel.scannedTableNumber!,
+                      ),
                       style: GoogleFonts.kaiseiOpti(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -119,8 +131,10 @@ class _QrScanScreenState extends State<QrScanScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: _isScanning ? null : _simulateScan,
-                icon: _isScanning
+                onPressed: viewModel.isScanning
+                    ? null
+                    : () => _simulateScan(context, viewModel),
+                icon: viewModel.isScanning
                     ? const SizedBox(
                         width: 20,
                         height: 20,
@@ -131,7 +145,9 @@ class _QrScanScreenState extends State<QrScanScreen> {
                       )
                     : const Icon(Icons.qr_code_scanner),
                 label: Text(
-                  _isScanning ? localizations.qr_scan_scanning : localizations.qr_scan_button,
+                  viewModel.isScanning
+                      ? localizations.qr_scan_scanning
+                      : localizations.qr_scan_button,
                   style: GoogleFonts.kaiseiOpti(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -148,12 +164,12 @@ class _QrScanScreenState extends State<QrScanScreen> {
               ),
             ),
 
-            if (_scannedTableNumber != null) ...[
+            if (viewModel.hasScannedTable) ...[
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _proceedToPayment,
+                  onPressed: () => _proceedToPayment(context, viewModel),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -176,7 +192,8 @@ class _QrScanScreenState extends State<QrScanScreen> {
 
             // Option de saisie manuelle
             TextButton(
-              onPressed: () => _showManualInputDialog(localizations),
+              onPressed: () =>
+                  _showManualInputDialog(context, localizations, viewModel),
               child: Text(
                 localizations.qr_scan_manual_input,
                 style: GoogleFonts.kaiseiOpti(
@@ -193,32 +210,28 @@ class _QrScanScreenState extends State<QrScanScreen> {
   }
 
   // Simulation du scan QR code (composant système)
-  Future<void> _simulateScan() async {
-    setState(() {
-      _isScanning = true;
-    });
+  Future<void> _simulateScan(
+    BuildContext context,
+    QrScanViewModel viewModel,
+  ) async {
+    final success = await viewModel.simulateScan();
 
-    // Simuler un délai de scan
-    await Future.delayed(const Duration(seconds: 2));
-
-    // Générer un numéro de table aléatoire entre 1 et 20
-    final tableNumber = (DateTime.now().millisecondsSinceEpoch % 20) + 1;
-
-    setState(() {
-      _scannedTableNumber = tableNumber.toString();
-      _isScanning = false;
-    });
-
-    // Feedback haptique (composant système)
-    HapticFeedback.mediumImpact();
+    if (success) {
+      // Feedback haptique (composant système)
+      HapticFeedback.mediumImpact();
+    }
   }
 
-  void _showManualInputDialog(AppLocalizations localizations) {
+  void _showManualInputDialog(
+    BuildContext context,
+    AppLocalizations localizations,
+    QrScanViewModel viewModel,
+  ) {
     final controller = TextEditingController();
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: Text(
           localizations.qr_scan_manual_dialog_title,
           style: GoogleFonts.kaiseiOpti(fontWeight: FontWeight.bold),
@@ -229,24 +242,19 @@ class _QrScanScreenState extends State<QrScanScreen> {
           decoration: InputDecoration(
             hintText: localizations.qr_scan_manual_dialog_hint,
             hintStyle: GoogleFonts.kaiseiOpti(),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
           style: GoogleFonts.kaiseiOpti(),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text(localizations.cancel, style: GoogleFonts.kaiseiOpti()),
           ),
           TextButton(
             onPressed: () {
-              if (controller.text.isNotEmpty) {
-                setState(() {
-                  _scannedTableNumber = controller.text;
-                });
-                Navigator.pop(context);
+              if (viewModel.validateTableNumber(controller.text)) {
+                Navigator.pop(dialogContext);
               }
             },
             child: Text(
@@ -259,13 +267,13 @@ class _QrScanScreenState extends State<QrScanScreen> {
     );
   }
 
-  void _proceedToPayment() {
+  void _proceedToPayment(BuildContext context, QrScanViewModel viewModel) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PaymentScreen(
-          totalAmount: widget.totalAmount,
-          tableNumber: _scannedTableNumber!,
+          totalAmount: totalAmount,
+          tableNumber: viewModel.scannedTableNumber!,
         ),
       ),
     );

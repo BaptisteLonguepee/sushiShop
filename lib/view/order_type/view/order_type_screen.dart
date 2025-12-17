@@ -13,7 +13,7 @@ class OrderTypeScreen extends StatefulWidget {
   State<OrderTypeScreen> createState() => _OrderTypeScreenState();
 }
 
-class _OrderTypeScreenState extends State<OrderTypeScreen> 
+class _OrderTypeScreenState extends State<OrderTypeScreen>
     with SingleTickerProviderStateMixin {
   late final OrderTypeViewModel _viewModel;
   final TextEditingController _tableNumberController = TextEditingController();
@@ -24,7 +24,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
     super.initState();
     _viewModel = OrderTypeViewModel();
     _viewModel.addListener(_onViewModelChanged);
-    
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -54,17 +54,12 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              AppColor.cream,
-              Colors.white,
-            ],
+            colors: [AppColor.cream, Colors.white],
           ),
         ),
         child: Stack(
           children: [
-            const Positioned.fill(
-              child: JapanesePattern(opacity: 0.02),
-            ),
+            const Positioned.fill(child: JapanesePattern(opacity: 0.02)),
 
             SafeArea(
               child: Column(
@@ -91,13 +86,17 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: IconButton(
-                                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                                icon: const Icon(
+                                  Icons.arrow_back,
+                                  color: Colors.white,
+                                ),
                                 onPressed: () => Navigator.pop(context),
                               ),
                             ),
                             const Spacer(),
                             Text(
-                              localizations?.order_type_title ?? 'Type de commande',
+                              localizations?.order_type_title ??
+                                  'Type de commande',
                               style: GoogleFonts.notoSerif(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -157,9 +156,12 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                             type: OrderType.dineIn,
                             icon: Icons.restaurant,
                             iconBg: const Color(0xFFFFE5E5),
-                            label: localizations?.order_type_dine_in ?? 'Dine In',
+                            label:
+                                localizations?.order_type_dine_in ?? 'Dine In',
                             sublabel: 'Eat here',
-                            isSelected: _viewModel.selectedOrderType == OrderType.dineIn,
+                            isSelected:
+                                _viewModel.selectedOrderType ==
+                                OrderType.dineIn,
                           ),
 
                           const SizedBox(height: 24),
@@ -169,9 +171,13 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                             type: OrderType.takeaway,
                             icon: Icons.shopping_bag_outlined,
                             iconBg: const Color(0xFFFFF4E0),
-                            label: localizations?.order_type_takeaway ?? 'Takeaway',
+                            label:
+                                localizations?.order_type_takeaway ??
+                                'Takeaway',
                             sublabel: 'Order to go',
-                            isSelected: _viewModel.selectedOrderType == OrderType.takeaway,
+                            isSelected:
+                                _viewModel.selectedOrderType ==
+                                OrderType.takeaway,
                           ),
 
                           const SizedBox(height: 40),
@@ -179,7 +185,8 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                           AnimatedSize(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
-                            child: _viewModel.selectedOrderType == OrderType.dineIn
+                            child:
+                                _viewModel.selectedOrderType == OrderType.dineIn
                                 ? _buildTableNumberInput(localizations)
                                 : const SizedBox.shrink(),
                           ),
@@ -261,8 +268,8 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                 duration: const Duration(milliseconds: 300),
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: isSelected 
-                      ? Colors.white.withValues(alpha: 0.25) 
+                  color: isSelected
+                      ? Colors.white.withValues(alpha: 0.25)
                       : iconBg,
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -291,7 +298,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                       sublabel,
                       style: GoogleFonts.notoSans(
                         fontSize: 16,
-                        color: isSelected 
+                        color: isSelected
                             ? Colors.white.withValues(alpha: 0.9)
                             : AppColor.cardColor,
                       ),
@@ -358,7 +365,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
               ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
           Container(
             decoration: BoxDecoration(
@@ -398,7 +405,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
           const SizedBox(height: 16),
 
           Text(
-            localizations?.order_type_enter_table_number ?? 
+            localizations?.order_type_enter_table_number ??
                 'Enter your table number',
             style: GoogleFonts.notoSans(
               fontSize: 14,
@@ -442,7 +449,8 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  (localizations?.order_type_continue ?? 'Continuer').toUpperCase(),
+                  (localizations?.order_type_continue ?? 'Continuer')
+                      .toUpperCase(),
                   style: GoogleFonts.notoSans(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,

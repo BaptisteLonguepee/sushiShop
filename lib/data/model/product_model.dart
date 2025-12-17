@@ -31,15 +31,18 @@ class Product {
     this.ordre = 0,
     this.createdAt,
     this.updatedAt,
-  })  : name = nom,
-        price = prix;
+  }) : name = nom,
+       price = prix;
 
   // Convert Supabase JSON → Product
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
       id: map['id'] ?? 0,
       categoryId: map['category_id'] ?? map['categorie_id'] ?? 0,
-      nom: map['nom']?.toString() ?? map['name']?.toString() ?? 'Produit sans nom',
+      nom:
+          map['nom']?.toString() ??
+          map['name']?.toString() ??
+          'Produit sans nom',
       description: map['description']?.toString(),
       prix: ((map['prix'] ?? map['price']) as num?)?.toDouble() ?? 0.0,
       imageUrl: map['image_url']?.toString(),
@@ -49,7 +52,7 @@ class Product {
       actif: map['actif'] ?? map['active'] ?? true,
       stock: map['stock'] as int?,
       ordre: map['ordre'] ?? map['order'] ?? 0,
-      createdAt: map['created_at'] != null 
+      createdAt: map['created_at'] != null
           ? DateTime.tryParse(map['created_at'].toString())
           : null,
       updatedAt: map['updated_at'] != null
@@ -119,10 +122,9 @@ class Product {
   bool get isActive => actif;
   bool get isInStock => stock == null || stock! > 0;
   bool get hasAllergens => allergens != null && allergens!.isNotEmpty;
-  
+
   List<String> get allergensList {
     if (allergens == null || allergens!.isEmpty) return [];
     return allergens!.split(',').map((e) => e.trim()).toList();
   }
 }
-

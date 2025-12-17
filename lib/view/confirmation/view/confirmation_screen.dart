@@ -8,15 +8,12 @@ import '../../welcome/view/welcome_screen.dart';
 class ConfirmationScreen extends StatelessWidget {
   final Commande commande;
 
-  const ConfirmationScreen({
-    super.key,
-    required this.commande,
-  });
+  const ConfirmationScreen({super.key, required this.commande});
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
       body: SafeArea(
@@ -39,11 +36,7 @@ class ConfirmationScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.check,
-                    size: 80,
-                    color: Colors.white,
-                  ),
+                  child: const Icon(Icons.check, size: 80, color: Colors.white),
                 ),
                 const SizedBox(height: 32),
 
@@ -130,10 +123,7 @@ class ConfirmationScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.info_outline,
-                        color: Colors.blue[700],
-                      ),
+                      Icon(Icons.info_outline, color: Colors.blue[700]),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
@@ -154,7 +144,9 @@ class ConfirmationScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => const WelcomeScreen(),
+                        ),
                         (route) => false,
                       );
                     },
@@ -182,16 +174,18 @@ class ConfirmationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(String label, String value, {bool bold = false, Color? valueColor}) {
+  Widget _buildDetailRow(
+    String label,
+    String value, {
+    bool bold = false,
+    Color? valueColor,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
-          style: GoogleFonts.kaiseiOpti(
-            fontSize: 16,
-            color: Colors.grey[700],
-          ),
+          style: GoogleFonts.kaiseiOpti(fontSize: 16, color: Colors.grey[700]),
         ),
         Text(
           value,

@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    
+
     _headerAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
@@ -51,9 +51,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     if (localizations == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -62,18 +60,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              AppColor.cream,
-              Colors.white,
-            ],
+            colors: [AppColor.cream, Colors.white],
           ),
         ),
         child: Stack(
           children: [
             // Motif de fond
-            const Positioned.fill(
-              child: JapanesePattern(opacity: 0.02),
-            ),
+            const Positioned.fill(child: JapanesePattern(opacity: 0.02)),
 
             // Contenu
             SafeArea(
@@ -216,7 +209,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             padding: const EdgeInsets.only(left: 12),
                             child: _buildCategoryChip(
                               label: category.nom,
-                              isSelected: viewModel.selectedCategory?.id == category.id,
+                              isSelected:
+                                  viewModel.selectedCategory?.id == category.id,
                               onTap: () => viewModel.selectCategory(category),
                             ),
                           );
@@ -295,7 +289,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildErrorState(HomeViewModel viewModel, AppLocalizations localizations) {
+  Widget _buildErrorState(
+    HomeViewModel viewModel,
+    AppLocalizations localizations,
+  ) {
     return Center(
       child: Container(
         margin: const EdgeInsets.all(24),
@@ -393,7 +390,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildProductsGrid(HomeViewModel viewModel, AppLocalizations localizations) {
+  Widget _buildProductsGrid(
+    HomeViewModel viewModel,
+    AppLocalizations localizations,
+  ) {
     return GridView.builder(
       padding: const EdgeInsets.all(20),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -556,13 +556,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void _showSearchDialog(BuildContext context) {
     final viewModel = context.read<HomeViewModel>();
     final localizations = AppLocalizations.of(context)!;
-    
+
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
@@ -603,7 +601,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(color: AppColor.primaryColor, width: 2),
+                    borderSide: BorderSide(
+                      color: AppColor.primaryColor,
+                      width: 2,
+                    ),
                   ),
                 ),
                 onChanged: (value) {
@@ -644,10 +645,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => _ProductDetailsSheet(
-        product: product,
-        localizations: localizations,
-      ),
+      builder: (context) =>
+          _ProductDetailsSheet(product: product, localizations: localizations),
     );
   }
 }
@@ -674,10 +673,7 @@ class _ProductCard extends StatelessWidget {
       builder: (context, value, child) {
         return Transform.scale(
           scale: value,
-          child: Opacity(
-            opacity: value,
-            child: child,
-          ),
+          child: Opacity(opacity: value, child: child),
         );
       },
       child: Material(
@@ -689,7 +685,10 @@ class _ProductCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColor.gold.withValues(alpha: 0.2), width: 2),
+              border: Border.all(
+                color: AppColor.gold.withValues(alpha: 0.2),
+                width: 2,
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.08),
@@ -742,7 +741,9 @@ class _ProductCard extends StatelessWidget {
                                       return Container(
                                         padding: const EdgeInsets.all(20),
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withValues(alpha: 0.5),
+                                          color: Colors.white.withValues(
+                                            alpha: 0.5,
+                                          ),
                                           shape: BoxShape.circle,
                                         ),
                                         child: const Icon(
@@ -828,7 +829,9 @@ class _ProductCard extends StatelessWidget {
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColor.lightGold.withValues(alpha: 0.5),
+                                color: AppColor.lightGold.withValues(
+                                  alpha: 0.5,
+                                ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -850,7 +853,9 @@ class _ProductCard extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColor.primaryColor.withValues(alpha: 0.3),
+                                    color: AppColor.primaryColor.withValues(
+                                      alpha: 0.3,
+                                    ),
                                     blurRadius: 8,
                                     offset: const Offset(0, 4),
                                   ),
@@ -916,9 +921,7 @@ class _ProductDetailsSheet extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                const Positioned.fill(
-                  child: JapanesePattern(opacity: 0.05),
-                ),
+                const Positioned.fill(child: JapanesePattern(opacity: 0.05)),
                 // Product image or icon
                 product.imageUrl != null
                     ? Positioned.fill(
@@ -1013,7 +1016,8 @@ class _ProductDetailsSheet extends StatelessWidget {
                 const SizedBox(height: 8),
 
                 // Description if available
-                if (product.description != null && product.description!.isNotEmpty) ...[
+                if (product.description != null &&
+                    product.description!.isNotEmpty) ...[
                   Text(
                     product.description!,
                     style: GoogleFonts.notoSans(
@@ -1031,11 +1035,20 @@ class _ProductDetailsSheet extends StatelessWidget {
                   runSpacing: 8,
                   children: [
                     if (product.vegetarien)
-                      _buildBadge('🥗 ${localizations.home_vegetarian}', AppColor.success),
+                      _buildBadge(
+                        '🥗 ${localizations.home_vegetarian}',
+                        AppColor.success,
+                      ),
                     if (product.vegan)
-                      _buildBadge('🌱 ${localizations.home_vegan}', Colors.green.shade700),
+                      _buildBadge(
+                        '🌱 ${localizations.home_vegan}',
+                        Colors.green.shade700,
+                      ),
                     if (!product.isInStock)
-                      _buildBadge('❌ ${localizations.home_out_of_stock}', AppColor.error),
+                      _buildBadge(
+                        '❌ ${localizations.home_out_of_stock}',
+                        AppColor.error,
+                      ),
                   ],
                 ),
 
@@ -1050,8 +1063,11 @@ class _ProductDetailsSheet extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.warning_amber_rounded, 
-                          color: Colors.orange.shade700, size: 20),
+                        Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.orange.shade700,
+                          size: 20,
+                        ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -1073,7 +1089,9 @@ class _ProductDetailsSheet extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColor.lightGold.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColor.gold.withValues(alpha: 0.3)),
+                    border: Border.all(
+                      color: AppColor.gold.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1153,7 +1171,7 @@ class _ProductDetailsSheet extends StatelessWidget {
                             onTap: () {
                               // Add to cart
                               context.read<CartViewModel>().addProduct(product);
-                              
+
                               Navigator.pop(context);
                             },
                             borderRadius: BorderRadius.circular(16),

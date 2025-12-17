@@ -16,9 +16,7 @@ class JapanesePattern extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: _JapanesePatternPainter(
-        color: color.withValues(alpha: opacity),
-      ),
+      painter: _JapanesePatternPainter(color: color.withValues(alpha: opacity)),
       child: Container(),
     );
   }
@@ -40,14 +38,15 @@ class _JapanesePatternPainter extends CustomPainter {
     final waveHeight = 30.0;
     final waveWidth = 60.0;
 
-    for (double y = -waveHeight; y < size.height + waveHeight; y += waveHeight * 1.5) {
+    for (
+      double y = -waveHeight;
+      y < size.height + waveHeight;
+      y += waveHeight * 1.5
+    ) {
       for (double x = -waveWidth; x < size.width + waveWidth; x += waveWidth) {
         // Première rangée d'arcs
         canvas.drawArc(
-          Rect.fromCircle(
-            center: Offset(x, y),
-            radius: waveWidth / 2,
-          ),
+          Rect.fromCircle(center: Offset(x, y), radius: waveWidth / 2),
           math.pi,
           math.pi,
           false,
@@ -143,9 +142,7 @@ class _CornerDecoration extends StatelessWidget {
       height: 20,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: const BorderRadius.only(
-          bottomRight: Radius.circular(20),
-        ),
+        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20)),
       ),
     );
   }

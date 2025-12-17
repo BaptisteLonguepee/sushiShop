@@ -83,8 +83,9 @@ class CommandeRepository {
   // Générer un numéro de commande unique
   Future<String> generateNumeroCommande() async {
     final now = DateTime.now();
-    final prefix = 'CMD${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}';
-    
+    final prefix =
+        'CMD${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}';
+
     // Récupérer le dernier numéro du jour
     final response = await supabase
         .from(table)
@@ -100,7 +101,7 @@ class CommandeRepository {
     final lastNumero = response[0]['numero_commande'] as String;
     final lastNumber = int.parse(lastNumero.substring(prefix.length));
     final newNumber = (lastNumber + 1).toString().padLeft(3, '0');
-    
+
     return '$prefix$newNumber';
   }
 }

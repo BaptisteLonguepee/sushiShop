@@ -13,7 +13,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: AppColor.secondaryColor,
       appBar: AppBar(
@@ -100,13 +100,16 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCartItem(BuildContext context, CartViewModel cart, CartItem item, AppLocalizations localizations) {
+  Widget _buildCartItem(
+    BuildContext context,
+    CartViewModel cart,
+    CartItem item,
+    AppLocalizations localizations,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Row(
@@ -123,8 +126,11 @@ class CartScreen extends StatelessWidget {
                     ? Image.network(
                         item.product.imageUrl!,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Icon(Icons.image_not_supported, size: 40, color: Colors.grey[400]),
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          Icons.image_not_supported,
+                          size: 40,
+                          color: Colors.grey[400],
+                        ),
                       )
                     : Icon(Icons.restaurant, size: 40, color: Colors.grey[400]),
               ),
@@ -214,7 +220,12 @@ class CartScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 IconButton(
                   icon: const Icon(Icons.delete_outline, color: Colors.red),
-                  onPressed: () => _showDeleteConfirmation(context, cart, item, localizations),
+                  onPressed: () => _showDeleteConfirmation(
+                    context,
+                    cart,
+                    item,
+                    localizations,
+                  ),
                 ),
               ],
             ),
@@ -224,7 +235,10 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildQuantityButton({required IconData icon, required VoidCallback onPressed}) {
+  Widget _buildQuantityButton({
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: AppColor.primaryColor,
@@ -239,7 +253,11 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomBar(BuildContext context, CartViewModel cart, AppLocalizations localizations) {
+  Widget _buildBottomBar(
+    BuildContext context,
+    CartViewModel cart,
+    AppLocalizations localizations,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -304,7 +322,9 @@ class CartScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CheckoutScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const CheckoutScreen(),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -329,7 +349,12 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmation(BuildContext context, CartViewModel cart, CartItem item, AppLocalizations localizations) {
+  void _showDeleteConfirmation(
+    BuildContext context,
+    CartViewModel cart,
+    CartItem item,
+    AppLocalizations localizations,
+  ) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
