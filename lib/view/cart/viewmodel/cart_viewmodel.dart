@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../data/model/product_model.dart';
 import '../../../data/model/cart_item_model.dart';
 
@@ -28,12 +29,14 @@ class CartViewModel extends ChangeNotifier {
         quantity: quantity,
       ));
     }
+    HapticFeedback.lightImpact();
     notifyListeners();
   }
 
   // Retirer un produit du panier
   void removeProduct(int productId) {
     _items.removeWhere((item) => item.product.id == productId);
+    HapticFeedback.mediumImpact();
     notifyListeners();
   }
 
@@ -42,6 +45,7 @@ class CartViewModel extends ChangeNotifier {
     final index = _items.indexWhere((item) => item.product.id == productId);
     if (index != -1) {
       _items[index].quantity++;
+      HapticFeedback.selectionClick();
       notifyListeners();
     }
   }
@@ -52,8 +56,10 @@ class CartViewModel extends ChangeNotifier {
     if (index != -1) {
       if (_items[index].quantity > 1) {
         _items[index].quantity--;
+        HapticFeedback.selectionClick();
       } else {
         _items.removeAt(index);
+        HapticFeedback.mediumImpact();
       }
       notifyListeners();
     }

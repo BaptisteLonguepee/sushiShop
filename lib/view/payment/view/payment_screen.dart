@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constant/color.dart';
@@ -361,6 +362,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future<void> _processPayment(AppLocalizations localizations) async {
+    HapticFeedback.mediumImpact();
     setState(() {
       _isProcessing = true;
     });
@@ -407,6 +409,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
       cart.clear();
 
+      HapticFeedback.heavyImpact();
+
       if (!mounted) return;
       
       Navigator.pushAndRemoveUntil(
@@ -417,6 +421,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         (route) => false,
       );
     } catch (e) {
+      HapticFeedback.vibrate();
       setState(() {
         _isProcessing = false;
       });
