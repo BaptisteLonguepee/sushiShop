@@ -236,22 +236,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: isSelected 
-              ? Colors.white 
+          color: isSelected
+              ? Colors.white
               : Colors.white.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(20),
-          border: isSelected 
+          border: isSelected
               ? Border.all(color: AppColor.gold, width: 2)
               : null,
         ),
-        child: Text(
-          label,
-          style: GoogleFonts.notoSans(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: isSelected ? AppColor.primaryColor : Colors.white,
+        child: Center(
+          child: Text(
+            label,
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: isSelected ? AppColor.primaryColor : Colors.white,
+            ),
           ),
         ),
       ),
