@@ -14,6 +14,12 @@
   "order_type_table_number": "Table Number",
   "order_type_enter_table_number": "Enter the number",
   "order_type_continue": "Continue",
+  "order_type_scan_qr": "Scan QR code",
+  "order_type_scan_qr_hint": "Quick and easy",
+  "order_type_scan_instruction": "Place the table QR code in the frame",
+  "order_type_or": "OR",
+  "order_type_manual_entry": "Manual entry",
+  "order_type_table_scanned": "Table",
 
   "cart_title": "My Cart",
   "cart_empty": "Your cart is empty",
@@ -59,6 +65,7 @@
   "checkout_title": "Review order",
   "checkout_order_summary": "Order summary",
   "checkout_scan_qr": "Scan the table QR code",
+  "checkout_proceed_payment": "Proceed to payment",
 
   "payment_title": "Payment",
   "payment_table_number": "Table n°{tableNumber}",

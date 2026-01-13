@@ -5,6 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sushishop/core/constant/color.dart';
+import 'package:sushishop/core/providers/locale_provider.dart';
+import 'package:sushishop/core/providers/order_provider.dart';
+import 'package:sushishop/core/services/vibration_service.dart';
+import 'package:sushishop/core/services/storage_service.dart';
 import 'package:sushishop/view/welcome/view/welcome_screen.dart';
 import 'package:sushishop/view/home/viewmodel/home_viewmodel.dart';
 import 'package:sushishop/view/cart/viewmodel/cart_viewmodel.dart';
@@ -23,6 +27,10 @@ void main() async {
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
 
+  // Initialize native services
+  await VibrationService.instance.init();
+  await StorageService.instance.init();
+
   runApp(const MyApp());
 }
 
@@ -35,18 +43,23 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => CartViewModel()),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()..initLocale()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
       ],
-      child: MaterialApp(
-        title: 'Sushi Shop',
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('en'), Locale('fr')],
-        theme: ThemeData(
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, child) {
+          return MaterialApp(
+            title: 'Sushi Shop',
+            debugShowCheckedModeBanner: false,
+            locale: localeProvider.locale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LocaleProvider.supportedLocales,
+            theme: ThemeData(
           textTheme: GoogleFonts.notoSansTextTheme().copyWith(
             displayLarge: GoogleFonts.notoSerif(
               fontSize: 96,
@@ -239,6 +252,8 @@ class MyApp extends StatelessWidget {
         ),
         routes: {'/cart': (context) => const CartScreen()},
         home: const WelcomeScreen(),
+          );
+        },
       ),
     );
   }

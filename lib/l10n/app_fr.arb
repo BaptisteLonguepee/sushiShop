@@ -14,6 +14,12 @@
   "order_type_table_number": "Numéro de chevalet",
   "order_type_enter_table_number": "Entrez le numéro",
   "order_type_continue": "Continuer",
+  "order_type_scan_qr": "Scanner le QR code",
+  "order_type_scan_qr_hint": "Rapide et facile",
+  "order_type_scan_instruction": "Placez le QR code de la table dans le cadre",
+  "order_type_or": "OU",
+  "order_type_manual_entry": "Saisie manuelle",
+  "order_type_table_scanned": "Table",
 
   "cart_title": "Mon Panier",
   "cart_empty": "Votre panier est vide",
@@ -59,6 +65,7 @@
   "checkout_title": "Vérifier la commande",
   "checkout_order_summary": "Résumé de la commande",
   "checkout_scan_qr": "Scanner le QR Code de la table",
+  "checkout_proceed_payment": "Procéder au paiement",
 
   "payment_title": "Paiement",
   "payment_table_number": "Table n°{tableNumber}",

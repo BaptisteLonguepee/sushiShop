@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../core/providers/order_provider.dart';
 import '../model/order_type_model.dart';
 import '../../home/view/home_screen.dart';
 
@@ -47,6 +49,13 @@ class OrderTypeViewModel extends ChangeNotifier {
       );
       return;
     }
+
+    // Stocker les informations dans le provider global
+    final orderProvider = context.read<OrderProvider>();
+    orderProvider.setOrderInfo(
+      type: _model.selectedOrderType!,
+      tableNumber: _model.tableNumber?.toString(),
+    );
 
     // Navigation vers la HomeScreen après sélection valide
     Navigator.of(context).pushAndRemoveUntil(

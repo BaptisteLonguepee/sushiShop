@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constant/color.dart';
 import '../../../core/widgets/japanese_pattern.dart';
+import '../../../core/widgets/qr_scanner_widget.dart';
 import '../../../l10n/app_localizations.dart';
 import '../model/order_type_model.dart';
 import '../viewmodel/order_type_viewmodel.dart';
@@ -367,6 +369,55 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
           ),
 
           const SizedBox(height: 24),
+
+          // Bouton Scanner QR Code
+          _buildScanQrButton(localizations),
+
+          const SizedBox(height: 20),
+
+          // Séparateur "OU"
+          Row(
+            children: [
+              Expanded(
+                child: Divider(
+                  color: AppColor.cardColor.withValues(alpha: 0.3),
+                  thickness: 1,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  localizations?.order_type_or ?? 'OU',
+                  style: GoogleFonts.notoSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.cardColor,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Divider(
+                  color: AppColor.cardColor.withValues(alpha: 0.3),
+                  thickness: 1,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+
+          // Saisie manuelle
+          Text(
+            localizations?.order_type_manual_entry ?? 'Saisie manuelle',
+            style: GoogleFonts.notoSans(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColor.cardColor,
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
           Container(
             decoration: BoxDecoration(
               color: AppColor.lightGold.withValues(alpha: 0.3),
@@ -402,7 +453,7 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
             ),
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
           Text(
             localizations?.order_type_enter_table_number ??
@@ -414,6 +465,122 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildScanQrButton(AppLocalizations? localizations) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => _openQrScanner(localizations),
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+          decoration: BoxDecoration(
+            gradient: AppColor.primaryGradient,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: AppColor.primaryColor.withValues(alpha: 0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.qr_code_scanner,
+                  color: Colors.white,
+                  size: 32,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    localizations?.order_type_scan_qr ?? 'Scanner le QR code',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    localizations?.order_type_scan_qr_hint ?? 'Rapide et facile',
+                    style: GoogleFonts.notoSans(
+                      fontSize: 13,
+                      color: Colors.white.withValues(alpha: 0.8),
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              const Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+                size: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _openQrScanner(AppLocalizations? localizations) {
+    HapticFeedback.lightImpact();
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QrScannerWidget(
+          title: localizations?.order_type_scan_qr ?? 'Scanner le QR code',
+          instruction: localizations?.order_type_scan_instruction ?? 
+              'Placez le QR code de la table dans le cadre',
+          onScanned: (tableNumber) {
+            // Mettre à jour le numéro de table
+            _tableNumberController.text = tableNumber;
+            final number = int.tryParse(tableNumber);
+            _viewModel.setTableNumber(number);
+            
+            // Feedback
+            HapticFeedback.mediumImpact();
+            
+            // Afficher un message de succès
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(Icons.check_circle, color: Colors.white),
+                    const SizedBox(width: 12),
+                    Text(
+                      '${localizations?.order_type_table_scanned ?? "Table"} $tableNumber',
+                      style: GoogleFonts.notoSans(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
