@@ -4,13 +4,24 @@ import '../model/product_model.dart';
 class ProductRepository {
   final SupabaseClient supabase = Supabase.instance.client;
 
-  final String table = 'product'; // <-- nom de table Supabase
+  final String table = 'produits'; // Nom de la table dans Supabase
 
   // 🔹 Récupérer tous les produits
   Future<List<Product>> getAllProducts() async {
     final response = await supabase
         .from(table)
         .select()
+        .order('id', ascending: true);
+
+    return (response as List).map((e) => Product.fromMap(e)).toList();
+  }
+
+  // 🔹 Récupérer uniquement les produits actifs
+  Future<List<Product>> getActiveProducts() async {
+    final response = await supabase
+        .from(table)
+        .select()
+        .eq('actif', true)
         .order('id', ascending: true);
 
     return (response as List).map((e) => Product.fromMap(e)).toList();
