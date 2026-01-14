@@ -42,10 +42,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  # Native components - Workshop requirements
-  vibration: ^2.0.1              # Composant système: vibration/haptic
-  shared_preferences: ^2.3.5     # Composant système: stockage local
-  mobile_scanner: ^6.0.2         # Composant système: caméra/QR scan
+  vibration: ^2.0.1
+  shared_preferences: ^2.3.5
+  mobile_scanner: ^6.0.2
 
 dev_dependencies:
   flutter_test:
