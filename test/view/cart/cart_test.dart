@@ -94,12 +94,7 @@ void main() {
 
     test('addProduct with quantity should add correct amount', () {
       // Arrange
-      final product = Product(
-        id: 1,
-        categoryId: 1,
-        nom: 'Edamame',
-        prix: 4.00,
-      );
+      final product = Product(id: 1, categoryId: 1, nom: 'Edamame', prix: 4.00);
 
       // Act
       viewModel.addProduct(product, quantity: 3);
@@ -130,12 +125,7 @@ void main() {
 
     test('removeProduct should remove item from cart', () {
       // Arrange
-      final product1 = Product(
-        id: 1,
-        categoryId: 1,
-        nom: 'Gyoza',
-        prix: 6.00,
-      );
+      final product1 = Product(id: 1, categoryId: 1, nom: 'Gyoza', prix: 6.00);
       final product2 = Product(
         id: 2,
         categoryId: 1,
@@ -155,12 +145,7 @@ void main() {
 
     test('incrementQuantity should increase item quantity', () {
       // Arrange
-      final product = Product(
-        id: 1,
-        categoryId: 1,
-        nom: 'Sake',
-        prix: 7.50,
-      );
+      final product = Product(id: 1, categoryId: 1, nom: 'Sake', prix: 7.50);
       viewModel.addProduct(product);
 
       // Act
@@ -236,12 +221,7 @@ void main() {
 
     test('totalPrice should calculate correct sum', () {
       // Arrange
-      final product1 = Product(
-        id: 1,
-        categoryId: 1,
-        nom: 'Ramen',
-        prix: 11.50,
-      );
+      final product1 = Product(id: 1, categoryId: 1, nom: 'Ramen', prix: 11.50);
       final product2 = Product(
         id: 2,
         categoryId: 1,

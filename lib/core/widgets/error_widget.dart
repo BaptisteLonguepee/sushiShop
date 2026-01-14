@@ -78,11 +78,7 @@ class ErrorWidget extends StatelessWidget {
                 ),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                size: 64,
-                color: AppColor.primaryColor,
-              ),
+              child: Icon(icon, size: 64, color: AppColor.primaryColor),
             ),
             const SizedBox(height: 24),
 
@@ -116,9 +112,7 @@ class ErrorWidget extends StatelessWidget {
                 icon: const Icon(Icons.refresh),
                 label: Text(
                   'Réessayer',
-                  style: GoogleFonts.notoSans(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: GoogleFonts.notoSans(fontWeight: FontWeight.bold),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.primaryColor,
@@ -199,11 +193,7 @@ class EmptyStateWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 80,
-              color: Colors.grey[400],
-            ),
+            Icon(icon, size: 80, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
               title,
@@ -225,10 +215,7 @@ class EmptyStateWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ],
-            if (action != null) ...[
-              const SizedBox(height: 24),
-              action!,
-            ],
+            if (action != null) ...[const SizedBox(height: 24), action!],
           ],
         ),
       ),

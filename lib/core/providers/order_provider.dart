@@ -25,7 +25,7 @@ class OrderProvider extends ChangeNotifier {
   void setOrderType(OrderType type) {
     _orderType = type;
     _isInitialized = true;
-    
+
     // Réinitialise le numéro de table si c'est à emporter
     if (type == OrderType.takeaway) {
       _tableNumber = null;

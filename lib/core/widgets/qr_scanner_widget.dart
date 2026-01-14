@@ -66,7 +66,7 @@ class _QrScannerWidgetState extends State<QrScannerWidget> {
         // Extraire le numéro de table du QR code
         final tableNumber = _extractTableNumber(barcode.rawValue!);
         widget.onScanned(tableNumber);
-        
+
         // Fermer le scanner
         Navigator.pop(context);
         break;
@@ -77,7 +77,10 @@ class _QrScannerWidgetState extends State<QrScannerWidget> {
   String _extractTableNumber(String qrData) {
     // Essayer d'extraire un numéro du QR code
     // Format attendu: "table:XX" ou juste "XX"
-    final tableMatch = RegExp(r'table[:\-_]?(\d+)', caseSensitive: false).firstMatch(qrData);
+    final tableMatch = RegExp(
+      r'table[:\-_]?(\d+)',
+      caseSensitive: false,
+    ).firstMatch(qrData);
     if (tableMatch != null) {
       return tableMatch.group(1)!;
     }
@@ -136,10 +139,7 @@ class _QrScannerWidgetState extends State<QrScannerWidget> {
         children: [
           // Scanner
           if (_controller != null)
-            MobileScanner(
-              controller: _controller!,
-              onDetect: _onDetect,
-            ),
+            MobileScanner(controller: _controller!, onDetect: _onDetect),
 
           // Overlay avec cadre de scan
           _buildScanOverlay(),
@@ -229,10 +229,12 @@ class _ScanOverlayPainter extends CustomPainter {
     // Fond semi-transparent
     final path = Path()
       ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
-      ..addRRect(RRect.fromRectAndRadius(
-        Rect.fromLTWH(left, top, scanAreaSize, scanAreaSize),
-        const Radius.circular(20),
-      ))
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(left, top, scanAreaSize, scanAreaSize),
+          const Radius.circular(20),
+        ),
+      )
       ..fillType = PathFillType.evenOdd;
 
     canvas.drawPath(path, paint);

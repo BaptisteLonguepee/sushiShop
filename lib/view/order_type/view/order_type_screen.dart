@@ -518,7 +518,8 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    localizations?.order_type_scan_qr_hint ?? 'Rapide et facile',
+                    localizations?.order_type_scan_qr_hint ??
+                        'Rapide et facile',
                     style: GoogleFonts.notoSans(
                       fontSize: 13,
                       color: Colors.white.withValues(alpha: 0.8),
@@ -541,23 +542,24 @@ class _OrderTypeScreenState extends State<OrderTypeScreen>
 
   void _openQrScanner(AppLocalizations? localizations) {
     HapticFeedback.lightImpact();
-    
+
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => QrScannerWidget(
           title: localizations?.order_type_scan_qr ?? 'Scanner le QR code',
-          instruction: localizations?.order_type_scan_instruction ?? 
+          instruction:
+              localizations?.order_type_scan_instruction ??
               'Placez le QR code de la table dans le cadre',
           onScanned: (tableNumber) {
             // Mettre à jour le numéro de table
             _tableNumberController.text = tableNumber;
             final number = int.tryParse(tableNumber);
             _viewModel.setTableNumber(number);
-            
+
             // Feedback
             HapticFeedback.mediumImpact();
-            
+
             // Afficher un message de succès
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

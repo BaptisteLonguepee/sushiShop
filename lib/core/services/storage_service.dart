@@ -39,11 +39,15 @@ class StorageService {
   Future<bool> saveCart(List<CartItem> items) async {
     try {
       final prefs = await _getPrefs();
-      final cartJson = items.map((item) => {
-        'product': item.product.toMap(),
-        'quantity': item.quantity,
-        'notes': item.notes,
-      }).toList();
+      final cartJson = items
+          .map(
+            (item) => {
+              'product': item.product.toMap(),
+              'quantity': item.quantity,
+              'notes': item.notes,
+            },
+          )
+          .toList();
 
       return await prefs.setString(_cartKey, jsonEncode(cartJson));
     } catch (e) {

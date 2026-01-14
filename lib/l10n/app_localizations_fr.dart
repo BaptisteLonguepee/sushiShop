@@ -60,7 +60,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get order_type_scan_qr_hint => 'Rapide et facile';
 
   @override
-  String get order_type_scan_instruction => 'Placez le QR code de la table dans le cadre';
+  String get order_type_scan_instruction =>
+      'Placez le QR code de la table dans le cadre';
 
   @override
   String get order_type_or => 'OU';
@@ -128,10 +129,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get confirmation_total_amount => 'Montant total';
 
   @override
-  String get confirmation_estimated_time => 'Temps de préparation estimé: 15-20 min';
+  String get confirmation_estimated_time =>
+      'Temps de préparation estimé: 15-20 min';
 
   @override
-  String get confirmation_notification_info => 'Vous recevrez une notification lorsque votre commande sera prête';
+  String get confirmation_notification_info =>
+      'Vous recevrez une notification lorsque votre commande sera prête';
 
   @override
   String get confirmation_back_home => 'Retour à l\'accueil';
@@ -175,13 +178,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get payment_terminal_title => 'Terminal de paiement';
 
   @override
-  String get payment_terminal_instruction => 'Veuillez insérer ou présenter votre carte bancaire au terminal de paiement';
+  String get payment_terminal_instruction =>
+      'Veuillez insérer ou présenter votre carte bancaire au terminal de paiement';
 
   @override
   String get payment_contactless => 'Sans contact accepté';
 
   @override
-  String get payment_counter_info => 'Veuillez vous présenter au comptoir avec votre numéro de commande pour effectuer le paiement.';
+  String get payment_counter_info =>
+      'Veuillez vous présenter au comptoir avec votre numéro de commande pour effectuer le paiement.';
 
   @override
   String get payment_processing => 'Paiement en cours...';
@@ -206,10 +211,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get qr_scan_title => 'Scanner le QR Code';
 
   @override
-  String get qr_scan_instruction => 'Veuillez scanner le QR code de votre table';
+  String get qr_scan_instruction =>
+      'Veuillez scanner le QR code de votre table';
 
   @override
-  String get qr_scan_required => 'Le numéro de table est nécessaire pour valider votre commande';
+  String get qr_scan_required =>
+      'Le numéro de table est nécessaire pour valider votre commande';
 
   @override
   String qr_scan_table(String tableNumber) {

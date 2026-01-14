@@ -13,10 +13,7 @@ class LocaleProvider extends ChangeNotifier {
   bool get isInitialized => _isInitialized;
 
   /// Langues supportées
-  static const List<Locale> supportedLocales = [
-    Locale('fr'),
-    Locale('en'),
-  ];
+  static const List<Locale> supportedLocales = [Locale('fr'), Locale('en')];
 
   /// Initialise la locale depuis le stockage local
   Future<void> initLocale() async {
@@ -82,4 +79,3 @@ class LocaleProvider extends ChangeNotifier {
     return _locale.languageCode == 'fr' ? 'EN' : 'FR';
   }
 }
-
